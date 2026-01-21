@@ -1,210 +1,128 @@
-// ==========================================
-// PRODUCTS (FLAG BEST SELLERS)
-// ==========================================
+/* ===================== STATE ===================== */
+let cart = [];
+let currentCategory = "All";
 
+/* ===================== ELEMENTS ===================== */
+const searchInput = document.querySelector(".search-input");
+const searchBtn = document.querySelector(".search-btn");
+const productsGrid = document.querySelector(".products-grid");
+const heroSection = document.querySelector(".hero");
+const cartSidebar = document.querySelector(".cart-sidebar");
+const cartIcon = document.querySelector(".cart-icon");
+const cartCount = document.querySelector(".cart-count");
+const logo = document.querySelector(".logo-img");
+
+/* ===================== PRODUCTS ===================== */
 const products = [
-    {
-        id: 1,
-        name: "Cable Management Kit",
-        description: "315-piece adhesive cable organizer",
-        price: 65,
-        category: "Workspace",
-        image: "📦",
-        featured: true
-    },
-    {
-        id: 2,
-        name: "Wireless Charging Stand",
-        description: "Fast Qi charging stand",
-        price: 120,
-        category: "Phone Accessories",
-        image: "📱",
-        featured: true
-    },
-    {
-        id: 3,
-        name: "LED Strip Lights",
-        description: "RGB smart LED strip (5m)",
-        price: 95,
-        category: "Home",
-        image: "💡"
-    },
-    {
-        id: 4,
-        name: "Laptop Stand",
-        description: "Adjustable aluminum stand",
-        price: 110,
-        category: "Workspace",
-        image: "💻",
-        featured: true
-    }
+  {
+    id: 1,
+    name: "Cable Management Kit",
+    category: "Workspace",
+    price: 65,
+    icon: "📦"
+  },
+  {
+    id: 2,
+    name: "Wireless Charging Stand",
+    category: "Phone Accessories",
+    price: 120,
+    icon: "📱"
+  },
+  {
+    id: 3,
+    name: "LED Strip Lights",
+    category: "Home",
+    price: 95,
+    icon: "💡"
+  },
+  {
+    id: 4,
+    name: "Laptop Stand",
+    category: "Workspace",
+    price: 110,
+    icon: "💻"
+  }
 ];
 
-// ==========================================
-// STATE (PERSISTED)
-// ==========================================
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-let selectedCategory = "All Products";
-
-// ==========================================
-// UTILITIES
-// ==========================================
-
-function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-function getCategories() {
-    return ["All Products", ...new Set(products.map(p => p.category))];
-}
-
-// ==========================================
-// RENDERING
-// ==========================================
-
+/* ===================== RENDER ===================== */
 function renderProducts(list) {
-    const grid = document.getElementById("productsGrid");
+  productsGrid.innerHTML = "";
 
-    if (!list.length) {
-        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;">No products found</p>`;
-        return;
-    }
+  list.forEach(product => {
+    const card = document.createElement("div");
+    card.className = "product-card";
 
-    grid.innerHTML = list.map(p => `
-        <div class="product-card">
-            ${p.featured ? `<span class="badge">Best Seller</span>` : ""}
-            <div class="product-image">${p.image}</div>
-            <div class="product-info">
-                <small>${p.category}</small>
-                <h3>${p.name}</h3>
-                <p>${p.description}</p>
-                <strong>${p.price} AED</strong>
-                <button onclick="addToCart(${p.id})">Add to Cart</button>
-            </div>
-        </div>
-    `).join("");
-}
+    card.innerHTML = `
+      <div class="product-image">${product.icon}</div>
+      <div class="product-info">
+        <div class="product-title">${product.name}</div>
+        <div class="product-price">${product.price} AED</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+    `;
 
-function loadProducts(category = "All Products") {
-    selectedCategory = category;
-    const list = category === "All Products"
-        ? products
-        : products.filter(p => p.category === category);
-
-    renderProducts(list);
-    updateCategoryButtons();
-}
-
-function createCategoryFilters() {
-    const container = document.getElementById("categoryFilters");
-    container.innerHTML = getCategories().map(cat => `
-        <button class="category-btn ${cat === selectedCategory ? "active" : ""}"
-                onclick="loadProducts('${cat}')">${cat}</button>
-    `).join("");
-}
-
-function updateCategoryButtons() {
-    document.querySelectorAll(".category-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.textContent === selectedCategory);
-    });
-}
-
-// ==========================================
-// SEARCH
-// ==========================================
-
-function searchProducts() {
-    const term = document.getElementById("searchInput").value.toLowerCase().trim();
-
-    const scoped = selectedCategory === "All Products"
-        ? products
-        : products.filter(p => p.category === selectedCategory);
-
-    const results = scoped.filter(p =>
-        p.name.toLowerCase().includes(term) ||
-        p.description.toLowerCase().includes(term)
-    );
-
-    renderProducts(results);
-}
-
-// ==========================================
-// CART
-// ==========================================
-
-function addToCart(id) {
-    const product = products.find(p => p.id === id);
-    const item = cart.find(i => i.id === id);
-
-    item ? item.quantity++ : cart.push({ ...product, quantity: 1 });
-    saveCart();
-    updateCart();
-}
-
-function updateCart() {
-    const cartItems = document.getElementById("cartItems");
-    const cartCount = document.getElementById("cartCount");
-    const cartTotal = document.getElementById("cartTotal");
-
-    if (!cart.length) {
-        cartItems.innerHTML = "<p>Your cart is empty</p>";
-        cartCount.textContent = 0;
-        cartTotal.textContent = "0.00 AED";
-        return;
-    }
-
-    cartCount.textContent = cart.reduce((s, i) => s + i.quantity, 0);
-    const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
-    cartTotal.textContent = total.toFixed(2) + " AED";
-
-    cartItems.innerHTML = cart.map(i => `
-        <div>
-            ${i.name} × ${i.quantity}
-            <button onclick="removeFromCart(${i.id})">✕</button>
-        </div>
-    `).join("");
-}
-
-function removeFromCart(id) {
-    cart = cart.filter(i => i.id !== id);
-    saveCart();
-    updateCart();
-}
-
-function toggleCart() {
-    document.getElementById("cartSidebar").classList.toggle("active");
-}
-
-// ==========================================
-// CHECKOUT (WHATSAPP)
-// ==========================================
-
-function checkout() {
-    if (!cart.length) return alert("Your cart is empty");
-
-    let message = "Hello ORLO, I’d like to order:%0A";
-    cart.forEach(i => {
-        message += `${i.name} x${i.quantity} — ${i.price * i.quantity} AED%0A`;
+    card.querySelector(".add-to-cart").addEventListener("click", () => {
+      addToCart(product);
     });
 
-    const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
-    message += `%0ATotal: ${total} AED`;
-
-    window.open(`https://wa.me/971500000000?text=${message}`, "_blank");
+    productsGrid.appendChild(card);
+  });
 }
 
-// ==========================================
-// INIT
-// ==========================================
+/* ===================== CART ===================== */
+function addToCart(product) {
+  cart.push(product);
+  cartCount.textContent = cart.length;
+  openCart(); // 🔥 FIX #3
+}
 
-window.onload = () => {
-    createCategoryFilters();
-    loadProducts();
-    updateCart();
+function openCart() {
+  cartSidebar.classList.add("active");
+}
 
-    document.getElementById("searchBtn").onclick = searchProducts;
-    document.getElementById("cartIcon").onclick = toggleCart;
-    document.getElementById("closeCart").onclick = toggleCart;
-    document.getElementById("checkoutBtn").onclick = checkout;
-};
+function closeCart() {
+  cartSidebar.classList.remove("active");
+}
+
+/* ===================== SEARCH ===================== */
+function runSearch() {
+  const query = searchInput.value.toLowerCase().trim();
+
+  if (!query) {
+    heroSection.style.display = "block";
+    renderProducts(products);
+    return;
+  }
+
+  heroSection.style.display = "none";
+
+  const results = products.filter(p =>
+    p.name.toLowerCase().includes(query)
+  );
+
+  renderProducts(results);
+}
+
+/* 🔥 FIX #2 — ENTER KEY SUPPORT */
+searchInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    runSearch();
+  }
+});
+
+searchBtn.addEventListener("click", runSearch);
+
+/* ===================== LOGO CLICK (HOME) ===================== */
+/* 🔥 FIX #1 */
+logo.addEventListener("click", () => {
+  searchInput.value = "";
+  heroSection.style.display = "block";
+  renderProducts(products);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+/* ===================== CART ICON ===================== */
+cartIcon.addEventListener("click", openCart);
+
+/* ===================== INIT ===================== */
+renderProducts(products);
