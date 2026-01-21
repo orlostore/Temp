@@ -1,89 +1,128 @@
+/* ===================== STATE ===================== */
+let cart = [];
+let currentCategory = "All";
+
+/* ===================== ELEMENTS ===================== */
+const searchInput = document.querySelector(".search-input");
+const searchBtn = document.querySelector(".search-btn");
+const productsGrid = document.querySelector(".products-grid");
+const heroSection = document.querySelector(".hero");
+const cartSidebar = document.querySelector(".cart-sidebar");
+const cartIcon = document.querySelector(".cart-icon");
+const cartCount = document.querySelector(".cart-count");
+const logo = document.querySelector(".logo-img");
+
+/* ===================== PRODUCTS ===================== */
 const products = [
-  { id: 1, name: "Cable Management Kit", price: 65 },
-  { id: 2, name: "Wireless Charging Stand", price: 120 },
-  { id: 3, name: "LED Strip Lights", price: 95 },
-  { id: 4, name: "Laptop Stand", price: 110 }
+  {
+    id: 1,
+    name: "Cable Management Kit",
+    category: "Workspace",
+    price: 65,
+    icon: "📦"
+  },
+  {
+    id: 2,
+    name: "Wireless Charging Stand",
+    category: "Phone Accessories",
+    price: 120,
+    icon: "📱"
+  },
+  {
+    id: 3,
+    name: "LED Strip Lights",
+    category: "Home",
+    price: 95,
+    icon: "💡"
+  },
+  {
+    id: 4,
+    name: "Laptop Stand",
+    category: "Workspace",
+    price: 110,
+    icon: "💻"
+  }
 ];
 
-let cart = [];
+/* ===================== RENDER ===================== */
+function renderProducts(list) {
+  productsGrid.innerHTML = "";
 
-const productsDiv = document.getElementById("products");
-const cartDiv = document.getElementById("cart");
-const cartItemsDiv = document.getElementById("cartItems");
-const cartTotal = document.getElementById("cartTotal");
-const cartCount = document.getElementById("cartCount");
+  list.forEach(product => {
+    const card = document.createElement("div");
+    card.className = "product-card";
 
-function renderProducts(list = products) {
-  productsDiv.innerHTML = "";
-  list.forEach(p => {
-    productsDiv.innerHTML += `
-      <div class="product">
-        <h4>${p.name}</h4>
-        <p>${p.price} AED</p>
-        <button onclick="addToCart(${p.id})">Add to Cart</button>
+    card.innerHTML = `
+      <div class="product-image">${product.icon}</div>
+      <div class="product-info">
+        <div class="product-title">${product.name}</div>
+        <div class="product-price">${product.price} AED</div>
+        <button class="add-to-cart">Add to Cart</button>
       </div>
     `;
+
+    card.querySelector(".add-to-cart").addEventListener("click", () => {
+      addToCart(product);
+    });
+
+    productsGrid.appendChild(card);
   });
 }
 
-function addToCart(id) {
-  const product = products.find(p => p.id === id);
+/* ===================== CART ===================== */
+function addToCart(product) {
   cart.push(product);
-  updateCart();
-  toggleCart(true);
-}
-
-function updateCart() {
-  cartItemsDiv.innerHTML = "";
-  let total = 0;
-  cart.forEach(item => {
-    total += item.price;
-    cartItemsDiv.innerHTML += `<p>${item.name} - ${item.price} AED</p>`;
-  });
-  cartTotal.textContent = total;
   cartCount.textContent = cart.length;
+  openCart(); // 🔥 FIX #3
 }
 
-function toggleCart(forceOpen = false) {
-  if (forceOpen) cartDiv.classList.add("open");
-  else cartDiv.classList.toggle("open");
+function openCart() {
+  cartSidebar.classList.add("active");
 }
 
-function searchProducts() {
-  const term = document.getElementById("searchInput").value.toLowerCase();
-  renderProducts(products.filter(p => p.name.toLowerCase().includes(term)));
+function closeCart() {
+  cartSidebar.classList.remove("active");
 }
 
-document.getElementById("searchInput").addEventListener("keydown", e => {
-  if (e.key === "Enter") searchProducts();
+/* ===================== SEARCH ===================== */
+function runSearch() {
+  const query = searchInput.value.toLowerCase().trim();
+
+  if (!query) {
+    heroSection.style.display = "block";
+    renderProducts(products);
+    return;
+  }
+
+  heroSection.style.display = "none";
+
+  const results = products.filter(p =>
+    p.name.toLowerCase().includes(query)
+  );
+
+  renderProducts(results);
+}
+
+/* 🔥 FIX #2 — ENTER KEY SUPPORT */
+searchInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    runSearch();
+  }
 });
 
-function goHome() {
-  document.getElementById("searchInput").value = "";
-  renderProducts();
+searchBtn.addEventListener("click", runSearch);
+
+/* ===================== LOGO CLICK (HOME) ===================== */
+/* 🔥 FIX #1 */
+logo.addEventListener("click", () => {
+  searchInput.value = "";
+  heroSection.style.display = "block";
+  renderProducts(products);
   window.scrollTo({ top: 0, behavior: "smooth" });
-}
+});
 
-function scrollToProducts() {
-  document.querySelector(".container").scrollIntoView({ behavior: "smooth" });
-}
+/* ===================== CART ICON ===================== */
+cartIcon.addEventListener("click", openCart);
 
-/* POLICIES */
-const policies = {
-  shipping: "Delivery across UAE in 2–3 business days.",
-  returns: "Returns accepted within 7 days.",
-  privacy: "Your data is never shared.",
-  terms: "Using ORLO means fair use and honesty."
-};
-
-function openPolicy(type) {
-  document.getElementById("policyTitle").textContent = type.toUpperCase();
-  document.getElementById("policyText").textContent = policies[type];
-  document.getElementById("policyModal").style.display = "block";
-}
-
-function closePolicy() {
-  document.getElementById("policyModal").style.display = "none";
-}
-
-renderProducts();
+/* ===================== INIT ===================== */
+renderProducts(products);
