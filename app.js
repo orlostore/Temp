@@ -5,70 +5,85 @@ const products = [
   { id: 4, name: "Laptop Stand", price: 110 }
 ];
 
-const productsGrid = document.getElementById("productsGrid");
-const searchInput = document.getElementById("searchInput");
-const searchBtn = document.getElementById("searchBtn");
-const hero = document.getElementById("hero");
-
-const cartSidebar = document.getElementById("cartSidebar");
-const cartItems = document.getElementById("cartItems");
-const cartCount = document.getElementById("cartCount");
-
 let cart = [];
 
-/* ===== RENDER PRODUCTS ===== */
-function renderProducts(list) {
-  productsGrid.innerHTML = "";
+const productsDiv = document.getElementById("products");
+const cartDiv = document.getElementById("cart");
+const cartItemsDiv = document.getElementById("cartItems");
+const cartTotal = document.getElementById("cartTotal");
+const cartCount = document.getElementById("cartCount");
+
+function renderProducts(list = products) {
+  productsDiv.innerHTML = "";
   list.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "product";
-    div.innerHTML = `
-      <h4>${p.name}</h4>
-      <p>${p.price} AED</p>
-      <button onclick="addToCart(${p.id})">Add to Cart</button>
+    productsDiv.innerHTML += `
+      <div class="product">
+        <h4>${p.name}</h4>
+        <p>${p.price} AED</p>
+        <button onclick="addToCart(${p.id})">Add to Cart</button>
+      </div>
     `;
-    productsGrid.appendChild(div);
   });
 }
 
-/* ===== SEARCH ===== */
-function searchProducts() {
-  const q = searchInput.value.toLowerCase();
-  hero.style.display = "none";
-  renderProducts(products.filter(p => p.name.toLowerCase().includes(q)));
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  cart.push(product);
+  updateCart();
+  toggleCart(true);
 }
 
-searchBtn.onclick = searchProducts;
-searchInput.addEventListener("keydown", e => {
+function updateCart() {
+  cartItemsDiv.innerHTML = "";
+  let total = 0;
+  cart.forEach(item => {
+    total += item.price;
+    cartItemsDiv.innerHTML += `<p>${item.name} - ${item.price} AED</p>`;
+  });
+  cartTotal.textContent = total;
+  cartCount.textContent = cart.length;
+}
+
+function toggleCart(forceOpen = false) {
+  if (forceOpen) cartDiv.classList.add("open");
+  else cartDiv.classList.toggle("open");
+}
+
+function searchProducts() {
+  const term = document.getElementById("searchInput").value.toLowerCase();
+  renderProducts(products.filter(p => p.name.toLowerCase().includes(term)));
+}
+
+document.getElementById("searchInput").addEventListener("keydown", e => {
   if (e.key === "Enter") searchProducts();
 });
 
-/* ===== CART ===== */
-function addToCart(id) {
-  cart.push(products.find(p => p.id === id));
-  cartCount.textContent = cart.length;
-  openCart();
-  renderCart();
+function goHome() {
+  document.getElementById("searchInput").value = "";
+  renderProducts();
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function renderCart() {
-  cartItems.innerHTML = cart.map(p => `<p>${p.name} – ${p.price} AED</p>`).join("");
+function scrollToProducts() {
+  document.querySelector(".container").scrollIntoView({ behavior: "smooth" });
 }
 
-function openCart() {
-  cartSidebar.classList.add("open");
-}
-
-document.getElementById("cartIcon").onclick = openCart;
-document.getElementById("closeCart").onclick = () =>
-  cartSidebar.classList.remove("open");
-
-/* ===== LOGO HOME ===== */
-document.getElementById("logo").onclick = () => {
-  hero.style.display = "block";
-  searchInput.value = "";
-  renderProducts(products);
+/* POLICIES */
+const policies = {
+  shipping: "Delivery across UAE in 2–3 business days.",
+  returns: "Returns accepted within 7 days.",
+  privacy: "Your data is never shared.",
+  terms: "Using ORLO means fair use and honesty."
 };
 
-/* INIT */
-renderProducts(products);
+function openPolicy(type) {
+  document.getElementById("policyTitle").textContent = type.toUpperCase();
+  document.getElementById("policyText").textContent = policies[type];
+  document.getElementById("policyModal").style.display = "block";
+}
+
+function closePolicy() {
+  document.getElementById("policyModal").style.display = "none";
+}
+
+renderProducts();
