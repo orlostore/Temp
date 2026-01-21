@@ -1,133 +1,210 @@
-// ===============================
-// PRODUCTS
-// ===============================
+// ==========================================
+// PRODUCTS (FLAG BEST SELLERS)
+// ==========================================
+
 const products = [
-  { id: 1, name: "Cable Management Kit", price: 89, category: "Workspace", image: "📦" },
-  { id: 2, name: "Laptop Stand", price: 129, category: "Workspace", image: "💻" },
-  { id: 3, name: "Wireless Charger", price: 119, category: "Phone", image: "📱" },
-  { id: 4, name: "Bluetooth Speaker", price: 159, category: "Electronics", image: "🔊" },
-  { id: 5, name: "Desk Organizer", price: 79, category: "Workspace", image: "📋" }
+    {
+        id: 1,
+        name: "Cable Management Kit",
+        description: "315-piece adhesive cable organizer",
+        price: 65,
+        category: "Workspace",
+        image: "📦",
+        featured: true
+    },
+    {
+        id: 2,
+        name: "Wireless Charging Stand",
+        description: "Fast Qi charging stand",
+        price: 120,
+        category: "Phone Accessories",
+        image: "📱",
+        featured: true
+    },
+    {
+        id: 3,
+        name: "LED Strip Lights",
+        description: "RGB smart LED strip (5m)",
+        price: 95,
+        category: "Home",
+        image: "💡"
+    },
+    {
+        id: 4,
+        name: "Laptop Stand",
+        description: "Adjustable aluminum stand",
+        price: 110,
+        category: "Workspace",
+        image: "💻",
+        featured: true
+    }
 ];
 
-// ===============================
-// STATE
-// ===============================
-let activeCategory = "All";
+// ==========================================
+// STATE (PERSISTED)
+// ==========================================
 
-// ===============================
-// ELEMENTS
-// ===============================
-const grid = document.getElementById("productsGrid");
-const filters = document.getElementById("categoryFilters");
-const hero = document.querySelector(".hero");
-const about = document.getElementById("about");
-const searchInput = document.getElementById("searchInput");
-const searchBtn = document.getElementById("searchBtn");
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let selectedCategory = "All Products";
 
-// ===============================
-// RENDER PRODUCTS (GRID ONLY)
-// ===============================
+// ==========================================
+// UTILITIES
+// ==========================================
+
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function getCategories() {
+    return ["All Products", ...new Set(products.map(p => p.category))];
+}
+
+// ==========================================
+// RENDERING
+// ==========================================
+
 function renderProducts(list) {
-  grid.innerHTML = "";
+    const grid = document.getElementById("productsGrid");
 
-  if (list.length === 0) {
-    grid.innerHTML = `<p style="padding:2rem;">No products found.</p>`;
-    return;
-  }
+    if (!list.length) {
+        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;">No products found</p>`;
+        return;
+    }
 
-  list.forEach(p => {
-    grid.innerHTML += `
-      <div class="product-card">
-        <div class="product-image">${p.image}</div>
-        <h3>${p.name}</h3>
-        <p class="product-category">${p.category}</p>
-        <strong>${p.price} AED</strong>
-        <button>Add to Cart</button>
-      </div>
-    `;
-  });
+    grid.innerHTML = list.map(p => `
+        <div class="product-card">
+            ${p.featured ? `<span class="badge">Best Seller</span>` : ""}
+            <div class="product-image">${p.image}</div>
+            <div class="product-info">
+                <small>${p.category}</small>
+                <h3>${p.name}</h3>
+                <p>${p.description}</p>
+                <strong>${p.price} AED</strong>
+                <button onclick="addToCart(${p.id})">Add to Cart</button>
+            </div>
+        </div>
+    `).join("");
 }
 
-// ===============================
-// CATEGORIES (TOP PILLS)
-// ===============================
-function renderCategories() {
-  const cats = ["All", ...new Set(products.map(p => p.category))];
-  filters.innerHTML = "";
+function loadProducts(category = "All Products") {
+    selectedCategory = category;
+    const list = category === "All Products"
+        ? products
+        : products.filter(p => p.category === category);
 
-  cats.forEach(cat => {
-    const btn = document.createElement("button");
-    btn.className = "category-btn";
-    btn.textContent = cat;
-    btn.onclick = () => filterByCategory(cat);
-    filters.appendChild(btn);
-  });
+    renderProducts(list);
+    updateCategoryButtons();
 }
 
-function filterByCategory(cat) {
-  activeCategory = cat;
-  hero.style.display = "block";
-  about.style.display = "block";
-
-  const list =
-    cat === "All"
-      ? products
-      : products.filter(p => p.category === cat);
-
-  renderProducts(list);
+function createCategoryFilters() {
+    const container = document.getElementById("categoryFilters");
+    container.innerHTML = getCategories().map(cat => `
+        <button class="category-btn ${cat === selectedCategory ? "active" : ""}"
+                onclick="loadProducts('${cat}')">${cat}</button>
+    `).join("");
 }
 
-// ===============================
-// SEARCH (NO LAYOUT CHANGE)
-// ===============================
+function updateCategoryButtons() {
+    document.querySelectorAll(".category-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.textContent === selectedCategory);
+    });
+}
+
+// ==========================================
+// SEARCH
+// ==========================================
+
 function searchProducts() {
-  const term = searchInput.value.toLowerCase().trim();
+    const term = document.getElementById("searchInput").value.toLowerCase().trim();
 
-  if (!term) {
-    filterByCategory(activeCategory);
-    return;
-  }
+    const scoped = selectedCategory === "All Products"
+        ? products
+        : products.filter(p => p.category === selectedCategory);
 
-  hero.style.display = "none";
-  about.style.display = "none";
+    const results = scoped.filter(p =>
+        p.name.toLowerCase().includes(term) ||
+        p.description.toLowerCase().includes(term)
+    );
 
-  const results = products.filter(p =>
-    p.name.toLowerCase().includes(term) ||
-    p.category.toLowerCase().includes(term)
-  );
-
-  renderProducts(results);
+    renderProducts(results);
 }
 
-searchBtn.onclick = searchProducts;
-searchInput.onkeypress = e => {
-  if (e.key === "Enter") searchProducts();
-};
+// ==========================================
+// CART
+// ==========================================
 
-// ===============================
-// POLICIES MODAL
-// ===============================
-function openPolicy(type) {
-  const text = {
-    shipping: "Delivery across UAE in 1–3 business days.",
-    returns: "7-day returns for unused items.",
-    privacy: "Your data is safe and never shared.",
-    terms: "Using ORLO means fair and honest usage."
-  };
+function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    const item = cart.find(i => i.id === id);
 
-  document.getElementById("policyContent").innerHTML = `
-    <h2>${type.toUpperCase()}</h2>
-    <p>${text[type]}</p>
-  `;
-  document.getElementById("policyModal").style.display = "block";
+    item ? item.quantity++ : cart.push({ ...product, quantity: 1 });
+    saveCart();
+    updateCart();
 }
 
-function closePolicy() {
-  document.getElementById("policyModal").style.display = "none";
+function updateCart() {
+    const cartItems = document.getElementById("cartItems");
+    const cartCount = document.getElementById("cartCount");
+    const cartTotal = document.getElementById("cartTotal");
+
+    if (!cart.length) {
+        cartItems.innerHTML = "<p>Your cart is empty</p>";
+        cartCount.textContent = 0;
+        cartTotal.textContent = "0.00 AED";
+        return;
+    }
+
+    cartCount.textContent = cart.reduce((s, i) => s + i.quantity, 0);
+    const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+    cartTotal.textContent = total.toFixed(2) + " AED";
+
+    cartItems.innerHTML = cart.map(i => `
+        <div>
+            ${i.name} × ${i.quantity}
+            <button onclick="removeFromCart(${i.id})">✕</button>
+        </div>
+    `).join("");
 }
 
-// ===============================
+function removeFromCart(id) {
+    cart = cart.filter(i => i.id !== id);
+    saveCart();
+    updateCart();
+}
+
+function toggleCart() {
+    document.getElementById("cartSidebar").classList.toggle("active");
+}
+
+// ==========================================
+// CHECKOUT (WHATSAPP)
+// ==========================================
+
+function checkout() {
+    if (!cart.length) return alert("Your cart is empty");
+
+    let message = "Hello ORLO, I’d like to order:%0A";
+    cart.forEach(i => {
+        message += `${i.name} x${i.quantity} — ${i.price * i.quantity} AED%0A`;
+    });
+
+    const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+    message += `%0ATotal: ${total} AED`;
+
+    window.open(`https://wa.me/971500000000?text=${message}`, "_blank");
+}
+
+// ==========================================
 // INIT
-// ===============================
-renderCategories();
-renderProducts(products);
+// ==========================================
+
+window.onload = () => {
+    createCategoryFilters();
+    loadProducts();
+    updateCart();
+
+    document.getElementById("searchBtn").onclick = searchProducts;
+    document.getElementById("cartIcon").onclick = toggleCart;
+    document.getElementById("closeCart").onclick = toggleCart;
+    document.getElementById("checkoutBtn").onclick = checkout;
+};
