@@ -1,66 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>ORLO Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORLO — Smart Tech & Home Essentials</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <header>
-  <div class="nav">
-    <div class="logo" onclick="goHome()">ORLO</div>
+    <nav>
+        <div class="logo-container">
+            <img src="logo.png" class="logo-img" alt="ORLO Logo">
+        </div>
 
-    <div class="search">
-      <input id="searchInput" type="text" placeholder="Search products..." />
-      <button onclick="searchProducts()">🔍</button>
-    </div>
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search products...">
+            <button class="search-btn" id="searchBtn">🔍</button>
+        </div>
 
-    <div class="cart-icon" onclick="toggleCart()">
-      🛒 <span id="cartCount">0</span>
-    </div>
-  </div>
+        <ul class="nav-links">
+            <li><a href="#products">Shop</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li>
+                <div class="cart-icon" id="cartIcon">
+                    🛒 <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </li>
+        </ul>
+    </nav>
 </header>
 
-<section class="hero" id="hero">
-  <h1>Smart Tech & Home Essentials</h1>
-  <p>Curated gadgets for your desk, car, and home — delivered across the UAE.</p>
-  <button onclick="scrollToProducts()">Shop Best Sellers</button>
+<section class="hero">
+    <h1>Smart Tech & Home Essentials</h1>
+    <p>Curated gadgets for your desk, car, and home — delivered across the UAE.</p>
+    <a href="#products" class="btn">Shop Best Sellers</a>
 </section>
 
-<main class="container">
-  <h2>Products</h2>
+<div class="container" id="products">
+    <h2 class="section-title">Best Sellers</h2>
 
-  <div class="products" id="products"></div>
-</main>
+    <div class="category-filters" id="categoryFilters"></div>
+    <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<section class="about-section" id="about">
+    <div class="container">
+        <h2 class="section-title">Our Story</h2>
+        <p>
+            ORLO is a family-owned Dubai business focused on practical, high-quality essentials.
+            We curate products we actually use — no clutter, no gimmicks.
+        </p>
+        <p>
+            Every order supports a local UAE business built on trust, simplicity, and fair pricing.
+        </p>
+    </div>
+</section>
+
+<section class="contact-section" id="contact">
+    <div class="container">
+        <h2 class="section-title">Get in Touch</h2>
+        <p>Email: info@orlostore.com</p>
+        <p>WhatsApp orders available at checkout</p>
+    </div>
+</section>
+
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h2>Your Cart</h2>
+        <button class="close-cart" id="closeCart">✕</button>
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-footer">
+        <div class="cart-total">
+            <span>Total:</span>
+            <span id="cartTotal">0.00 AED</span>
+        </div>
+        <button class="checkout-btn" id="checkoutBtn">
+            Order via WhatsApp
+        </button>
+    </div>
+</div>
 
 <footer>
-  <div class="footer-links">
-    <a onclick="openPolicy('shipping')">Shipping</a>
-    <a onclick="openPolicy('returns')">Returns</a>
-    <a onclick="openPolicy('privacy')">Privacy</a>
-    <a onclick="openPolicy('terms')">Terms</a>
-  </div>
-  <p>© ORLO – Dubai, UAE</p>
+    <p>&copy; 2026 ORLO — Dubai, UAE</p>
+    <p class="footer-subtitle">Licensed & Family-Owned</p>
 </footer>
-
-<!-- CART -->
-<div class="cart" id="cart">
-  <h3>Your Cart</h3>
-  <div id="cartItems"></div>
-  <p><strong>Total:</strong> <span id="cartTotal">0</span> AED</p>
-  <button onclick="toggleCart()">Close</button>
-</div>
-
-<!-- POLICY MODAL -->
-<div class="modal" id="policyModal">
-  <div class="modal-box">
-    <h3 id="policyTitle"></h3>
-    <p id="policyText"></p>
-    <button onclick="closePolicy()">Close</button>
-  </div>
-</div>
 
 <script src="app.js"></script>
 </body>
