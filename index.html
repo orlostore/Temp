@@ -15,8 +15,14 @@
         <nav>
             <div class="logo-container">
                 <img src="logo.png" class="logo-img" alt="ORLO Logo">
-                <div class="slogan">QUALITY IS A CLICK AWAY</div>
             </div>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()">
+                <button class="search-btn" onclick="searchProducts()">🔍</button>
+            </div>
+            
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#products">Products</a></li>
@@ -39,6 +45,20 @@
         <a href="#products" class="btn">Explore Our Collection</a>
     </section>
 
+    <!-- Products Section -->
+    <div class="container" id="products">
+        <h2 class="section-title">Our Products</h2>
+        
+        <!-- Category Filters -->
+        <div class="category-filters" id="categoryFilters">
+            <!-- Category buttons will be loaded here by JavaScript -->
+        </div>
+        
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be loaded here by JavaScript -->
+        </div>
+    </div>
+
     <!-- About Section -->
     <section class="about-section" id="about">
         <div class="container">
@@ -60,7 +80,7 @@
                 </p>
                 <div class="trust-badges">
                     <div class="trust-badge">
-                        <span class="badge-icon">✓</span>
+                        <span class="badge-icon green-tick">✓</span>
                         <span>Fully Licensed in Dubai, UAE</span>
                     </div>
                     <div class="trust-badge">
@@ -68,7 +88,7 @@
                         <span>Family-Owned & Operated</span>
                     </div>
                     <div class="trust-badge">
-                        <span class="badge-icon">★</span>
+                        <span class="badge-stars">⭐⭐⭐⭐⭐</span>
                         <span>Quality You Can Trust</span>
                     </div>
                 </div>
@@ -81,20 +101,6 @@
         </div>
     </section>
 
-    <!-- Products Section -->
-    <div class="container" id="products">
-        <h2 class="section-title">Our Products</h2>
-        
-        <!-- Category Filters -->
-        <div class="category-filters" id="categoryFilters">
-            <!-- Category buttons will be loaded here by JavaScript -->
-        </div>
-        
-        <div class="products-grid" id="productsGrid">
-            <!-- Products will be loaded here by JavaScript -->
-        </div>
-    </div>
-
     <!-- Contact Section -->
     <section class="contact-section" id="contact">
         <div class="container">
@@ -105,7 +111,7 @@
                     <strong>📍 Location:</strong> Dubai, UAE
                 </div>
                 <div class="contact-item">
-                    <strong>✉️ Email:</strong> hello@orlostore.com
+                    <strong>✉️ Email:</strong> info@orlostore.com
                 </div>
                 <div class="contact-item">
                     <strong>📱 WhatsApp:</strong> Coming soon
@@ -142,5 +148,6 @@
 
     <script src="products.js"></script>
     <script src="cart.js"></script>
+    <script src="search.js"></script>
 </body>
 </html>

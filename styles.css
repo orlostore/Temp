@@ -39,24 +39,51 @@ nav {
 
 .logo-container {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
 }
 
 .logo-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+    width: 100px;
+    height: 100px;
 }
 
-.slogan {
+/* Search Bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    max-width: 500px;
+    margin: 0 2rem;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #ddd;
+    border-radius: 25px 0 0 25px;
+    font-size: 0.95rem;
     font-family: 'Inter', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 2px;
-    color: var(--primary);
-    text-transform: uppercase;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    border-color: var(--accent);
+}
+
+.search-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--accent);
+    border: 2px solid var(--accent);
+    border-left: none;
+    border-radius: 0 25px 25px 0;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background 0.3s;
+}
+
+.search-btn:hover {
+    background: #c96644;
 }
 
 .nav-links {
@@ -186,6 +213,16 @@ nav {
 .badge-icon {
     font-size: 1.5rem;
     color: var(--accent);
+}
+
+.badge-icon.green-tick {
+    color: #22c55e;
+    font-weight: bold;
+}
+
+.badge-stars {
+    font-size: 0.9rem;
+    letter-spacing: 2px;
 }
 
 .trust-badge span:last-child {
@@ -525,18 +562,26 @@ footer {
         font-size: 2rem;
     }
 
+    nav {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .search-container {
+        order: 3;
+        width: 100%;
+        max-width: 100%;
+        margin: 1rem 0 0 0;
+    }
+
     .nav-links {
         gap: 1rem;
         font-size: 0.85rem;
     }
 
     .logo-img {
-        width: 60px;
-        height: 60px;
-    }
-
-    .slogan {
-        font-size: 0.6rem;
+        width: 70px;
+        height: 70px;
     }
 
     .cart-sidebar {
