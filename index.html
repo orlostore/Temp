@@ -8,47 +8,58 @@
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
 <header>
-  <nav class="nav">
-    <div class="logo" id="logo">ORLO</div>
+  <div class="nav">
+    <div class="logo" onclick="goHome()">ORLO</div>
 
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search products..." />
-      <button id="searchBtn">🔍</button>
+    <div class="search">
+      <input id="searchInput" type="text" placeholder="Search products..." />
+      <button onclick="searchProducts()">🔍</button>
     </div>
 
-    <div class="cart" id="cartIcon">
+    <div class="cart-icon" onclick="toggleCart()">
       🛒 <span id="cartCount">0</span>
     </div>
-  </nav>
+  </div>
 </header>
 
-<!-- ===== HERO (LANDING ONLY) ===== -->
 <section class="hero" id="hero">
   <h1>Smart Tech & Home Essentials</h1>
-  <p>Curated gadgets delivered across the UAE</p>
-  <button id="shopBtn">Shop Best Sellers</button>
+  <p>Curated gadgets for your desk, car, and home — delivered across the UAE.</p>
+  <button onclick="scrollToProducts()">Shop Best Sellers</button>
 </section>
 
-<!-- ===== MAIN CONTENT ===== -->
-<main class="page">
+<main class="container">
+  <h2>Products</h2>
 
-  <!-- PRODUCTS -->
-  <section id="productsSection">
-    <h2 class="section-title">Best Sellers</h2>
-    <div class="products-grid" id="productsGrid"></div>
-  </section>
-
+  <div class="products" id="products"></div>
 </main>
 
-<!-- ===== CART SIDEBAR ===== -->
-<div class="cart-sidebar" id="cartSidebar">
-  <div class="cart-header">
-    <h3>Your Cart</h3>
-    <button id="closeCart">✖</button>
+<footer>
+  <div class="footer-links">
+    <a onclick="openPolicy('shipping')">Shipping</a>
+    <a onclick="openPolicy('returns')">Returns</a>
+    <a onclick="openPolicy('privacy')">Privacy</a>
+    <a onclick="openPolicy('terms')">Terms</a>
   </div>
+  <p>© ORLO – Dubai, UAE</p>
+</footer>
+
+<!-- CART -->
+<div class="cart" id="cart">
+  <h3>Your Cart</h3>
   <div id="cartItems"></div>
+  <p><strong>Total:</strong> <span id="cartTotal">0</span> AED</p>
+  <button onclick="toggleCart()">Close</button>
+</div>
+
+<!-- POLICY MODAL -->
+<div class="modal" id="policyModal">
+  <div class="modal-box">
+    <h3 id="policyTitle"></h3>
+    <p id="policyText"></p>
+    <button onclick="closePolicy()">Close</button>
+  </div>
 </div>
 
 <script src="app.js"></script>
