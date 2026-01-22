@@ -49,6 +49,34 @@ const products = [
 const WHATSAPP_NUMBER = "971XXXXXXXXX";
 
 // ==========================================
+// DELIVERY FEES STRUCTURE
+// ==========================================
+const deliveryZones = {
+    dubai: {
+        name: "Dubai",
+        fee: 15,
+        freeThreshold: 150
+    },
+    sharjah_ajman: {
+        name: "Sharjah / Ajman",
+        fee: 20,
+        freeThreshold: 200
+    },
+    abu_dhabi: {
+        name: "Abu Dhabi",
+        fee: 30,
+        freeThreshold: 250
+    },
+    other: {
+        name: "Other Emirates",
+        fee: 45,
+        freeThreshold: 350
+    }
+};
+
+const DELIVERY_TIME = "2-5 business days";
+
+// ==========================================
 // POLICIES CONTENT (STRICT RETURN POLICY)
 // ==========================================
 
@@ -57,13 +85,17 @@ const policies = {
         <h2>Shipping & Delivery</h2>
         <p><strong>Coverage:</strong> We currently deliver within the UAE only.</p>
         <p><strong>Processing Time:</strong> Orders are processed within 24–48 hours of payment confirmation.</p>
-        <p><strong>Delivery Timeline:</strong> Delivery times vary by location:</p>
+        <p><strong>Delivery Timeline:</strong> 2-5 business days for all locations.</p>
+
+        <p><strong>Delivery Fees:</strong></p>
         <ul>
-            <li>Dubai: 1-2 business days</li>
-            <li>Other Emirates: 2-4 business days</li>
+            <li><strong>Dubai:</strong> 15 AED (FREE on orders over 150 AED)</li>
+            <li><strong>Sharjah / Ajman:</strong> 20 AED (FREE on orders over 200 AED)</li>
+            <li><strong>Abu Dhabi:</strong> 30 AED (FREE on orders over 250 AED)</li>
+            <li><strong>Other Emirates:</strong> 45 AED (FREE on orders over 350 AED)</li>
         </ul>
+
         <p><strong>Tracking:</strong> You will receive tracking information via WhatsApp once your order ships.</p>
-        <p><strong>Delivery Fees:</strong> Calculated at checkout based on your location.</p>
     `,
     returns: `
         <h2>Returns & Refunds</h2>
@@ -102,6 +134,7 @@ const policies = {
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let selectedCategory = "All Products";
+let selectedDeliveryZone = localStorage.getItem("deliveryZone") || "dubai";
 
 // ==========================================
 // UTILITIES
@@ -111,8 +144,28 @@ function saveCart() {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+function saveDeliveryZone() {
+    localStorage.setItem("deliveryZone", selectedDeliveryZone);
+}
+
 function getCategories() {
     return ["All Products", ...new Set(products.map(p => p.category))];
+}
+
+function calculateDeliveryFee(subtotal) {
+    const zone = deliveryZones[selectedDeliveryZone];
+    if (subtotal >= zone.freeThreshold) {
+        return 0;
+    }
+    return zone.fee;
+}
+
+function getAmountUntilFreeDelivery(subtotal) {
+    const zone = deliveryZones[selectedDeliveryZone];
+    if (subtotal >= zone.freeThreshold) {
+        return 0;
+    }
+    return zone.freeThreshold - subtotal;
 }
 
 // ==========================================
@@ -214,19 +267,26 @@ function updateCart() {
     const cartItems = document.getElementById("cartItems");
     const cartCount = document.getElementById("cartCount");
     const cartTotal = document.getElementById("cartTotal");
+    const cartFooter = document.querySelector(".cart-footer");
 
     if (!cart.length) {
         cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>";
         cartCount.textContent = 0;
         cartTotal.textContent = "0.00 AED";
+        // Hide delivery section when cart is empty
+        const deliverySection = document.getElementById("deliverySection");
+        if (deliverySection) deliverySection.style.display = "none";
         return;
     }
 
     const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
-    const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
-    
+    const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+    const deliveryFee = calculateDeliveryFee(subtotal);
+    const total = subtotal + deliveryFee;
+    const amountUntilFree = getAmountUntilFreeDelivery(subtotal);
+    const zone = deliveryZones[selectedDeliveryZone];
+
     cartCount.textContent = totalItems;
-    cartTotal.textContent = total.toFixed(2) + " AED";
 
     cartItems.innerHTML = cart.map(i => `
         <div style="display:flex; justify-content:space-between; align-items:center; padding:1.5rem; border-bottom:1px solid #eee;">
@@ -243,6 +303,61 @@ function updateCart() {
             </div>
         </div>
     `).join("");
+
+    // Update cart footer with delivery section
+    cartFooter.innerHTML = `
+        <div id="deliverySection" class="delivery-section">
+            <div class="delivery-header">
+                <span class="delivery-icon">🚚</span>
+                <span>Delivery Location</span>
+            </div>
+            <select id="deliveryZoneSelect" class="delivery-select" onchange="changeDeliveryZone(this.value)">
+                ${Object.entries(deliveryZones).map(([key, zone]) => `
+                    <option value="${key}" ${key === selectedDeliveryZone ? 'selected' : ''}>
+                        ${zone.name}
+                    </option>
+                `).join('')}
+            </select>
+            ${amountUntilFree > 0 ? `
+                <div class="free-delivery-hint">
+                    Add <strong>${amountUntilFree.toFixed(2)} AED</strong> more for FREE delivery!
+                </div>
+            ` : `
+                <div class="free-delivery-achieved">
+                    ✓ You qualify for FREE delivery!
+                </div>
+            `}
+            <div class="delivery-time">
+                <span>Delivery time: ${DELIVERY_TIME}</span>
+            </div>
+        </div>
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span>${subtotal.toFixed(2)} AED</span>
+            </div>
+            <div class="summary-row delivery-row">
+                <span>Delivery (${zone.name}):</span>
+                <span class="${deliveryFee === 0 ? 'free-delivery' : ''}">${deliveryFee === 0 ? 'FREE' : deliveryFee.toFixed(2) + ' AED'}</span>
+            </div>
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">${total.toFixed(2)} AED</span>
+            </div>
+        </div>
+        <button class="checkout-btn stripe-btn" id="stripeCheckoutBtn" onclick="checkoutWithStripe()">
+            Pay with Card
+        </button>
+        <button class="checkout-btn whatsapp-btn" id="checkoutBtn" onclick="checkout()">
+            Order via WhatsApp
+        </button>
+    `;
+}
+
+function changeDeliveryZone(zone) {
+    selectedDeliveryZone = zone;
+    saveDeliveryZone();
+    updateCart();
 }
 
 function updateQuantity(id, change) {
@@ -278,18 +393,85 @@ function checkout() {
         return;
     }
 
+    const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+    const deliveryFee = calculateDeliveryFee(subtotal);
+    const total = subtotal + deliveryFee;
+    const zone = deliveryZones[selectedDeliveryZone];
+
     let message = "Hello ORLO, I'd like to order:%0A%0A";
-    
+
     cart.forEach(i => {
         message += `• ${i.name} × ${i.quantity} = ${(i.price * i.quantity).toFixed(2)} AED%0A`;
     });
 
-    const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+    message += `%0A─────────────────%0A`;
+    message += `Subtotal: ${subtotal.toFixed(2)} AED%0A`;
+    message += `Delivery (${zone.name}): ${deliveryFee === 0 ? 'FREE' : deliveryFee.toFixed(2) + ' AED'}%0A`;
     message += `%0A*Total: ${total.toFixed(2)} AED*`;
-    message += `%0A%0APlease confirm delivery address and payment method.`;
+    message += `%0A%0ADelivery Location: ${zone.name}`;
+    message += `%0AEstimated Delivery: ${DELIVERY_TIME}`;
+    message += `%0A%0APlease confirm my delivery address and payment method.`;
 
     // TODO: Change WHATSAPP_NUMBER at the top of this file to your actual number
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+}
+
+// ==========================================
+// CHECKOUT (STRIPE)
+// ==========================================
+
+async function checkoutWithStripe() {
+    if (!cart.length) {
+        alert("Your cart is empty!");
+        return;
+    }
+
+    // Show loading state
+    const stripeBtn = document.getElementById('stripeCheckoutBtn');
+    if (stripeBtn) {
+        stripeBtn.disabled = true;
+        stripeBtn.textContent = 'Processing...';
+    }
+
+    try {
+        const response = await fetch('/api/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                items: cart.map(item => ({
+                    name: item.name,
+                    description: item.description,
+                    price: item.price,
+                    quantity: item.quantity
+                })),
+                deliveryZone: selectedDeliveryZone,
+                successUrl: window.location.origin + '/?success=true',
+                cancelUrl: window.location.origin + '/?canceled=true'
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to create checkout session');
+        }
+
+        // Redirect to Stripe Checkout
+        if (data.url) {
+            window.location.href = data.url;
+        }
+    } catch (error) {
+        console.error('Checkout error:', error);
+        alert('Checkout failed: ' + error.message);
+
+        // Reset button
+        if (stripeBtn) {
+            stripeBtn.disabled = false;
+            stripeBtn.textContent = 'Pay with Card';
+        }
+    }
 }
 
 // ==========================================
@@ -359,9 +541,25 @@ window.onload = () => {
     loadProducts();
     updateCart();
 
+    // Handle Stripe checkout success/cancel
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success') === 'true') {
+        // Clear cart on successful payment
+        cart = [];
+        saveCart();
+        updateCart();
+        showNotification('Payment successful! Thank you for your order.');
+        // Clean up URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (urlParams.get('canceled') === 'true') {
+        showNotification('Payment was canceled. Your cart is still saved.');
+        // Clean up URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     // Search button click
     document.getElementById("searchBtn").onclick = searchProducts;
-    
+
     // ENTER KEY SUPPORT FOR SEARCH
     document.getElementById("searchInput").onkeypress = (e) => {
         if (e.key === "Enter") {
@@ -369,12 +567,11 @@ window.onload = () => {
             searchProducts();
         }
     };
-    
+
     // Cart controls
     document.getElementById("cartIcon").onclick = toggleCart;
     document.getElementById("closeCart").onclick = toggleCart;
-    document.getElementById("checkoutBtn").onclick = checkout;
-    
+
     // Close policy modal when clicking outside
     document.getElementById("policyModal").onclick = (e) => {
         if (e.target.id === "policyModal") {

@@ -460,10 +460,132 @@ nav {
   font-weight: 700;
   cursor: pointer;
   transition: background 0.3s;
+  margin-bottom: 0.75rem;
+}
+
+.checkout-btn:last-child {
+  margin-bottom: 0;
 }
 
 .checkout-btn:hover {
   background: #c96644;
+}
+
+.checkout-btn.stripe-btn {
+  background: #635bff;
+}
+
+.checkout-btn.stripe-btn:hover {
+  background: #5046e5;
+}
+
+.checkout-btn.whatsapp-btn {
+  background: #25d366;
+}
+
+.checkout-btn.whatsapp-btn:hover {
+  background: #1da851;
+}
+
+.checkout-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+/* ===================== DELIVERY SECTION IN CART ===================== */
+.delivery-section {
+  background: #f0f4f7;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.delivery-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.delivery-icon {
+  font-size: 1.3rem;
+}
+
+.delivery-select {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  font-family: inherit;
+  background: white;
+  cursor: pointer;
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+
+.delivery-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.free-delivery-hint {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  background: #fff3cd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #856404;
+  text-align: center;
+}
+
+.free-delivery-hint strong {
+  color: var(--accent);
+}
+
+.free-delivery-achieved {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  background: #d4edda;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #155724;
+  text-align: center;
+  font-weight: 600;
+}
+
+.delivery-time {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+}
+
+/* ===================== CART SUMMARY ===================== */
+.cart-summary {
+  margin-bottom: 1.5rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.summary-row.delivery-row {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.free-delivery {
+  color: #28a745;
+  font-weight: 700;
 }
 
 /* ===================== POLICY MODAL ===================== */
