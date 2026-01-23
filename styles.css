@@ -422,14 +422,14 @@ nav {
 }
 
 .contact-text-en {
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   color: #555;
   line-height: 1.6;
   margin-bottom: 1rem;
 }
 
 .contact-text-ar {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #555;
   line-height: 1.7;
   font-family: 'Almarai', sans-serif;
@@ -446,20 +446,21 @@ nav {
 
 .contact-detail {
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
 }
 
 .contact-detail strong {
   color: var(--primary);
   display: block;
   margin-bottom: 0.75rem;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
 }
 
 .contact-detail a {
   color: #e07856;
   text-decoration: none;
   font-weight: 500;
+  font-size: 1.15rem;
 }
 
 .contact-detail a:hover {
