@@ -111,6 +111,59 @@ function checkout() { if (!cart.length) { alert("Your cart is empty!"); return; 
 async function checkoutWithStripe() { if (!cart.length) { alert("Your cart is empty!"); return; } const stripeBtn = document.getElementById('stripeCheckoutBtn'); if (stripeBtn) { stripeBtn.disabled = true; stripeBtn.textContent = 'Processing... / جارٍ المعالجة...'; } try { const response = await fetch('/api/create-checkout-session', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: cart.map(item => ({ name: item.name, description: item.description, price: item.price, quantity: item.quantity })), deliveryZone: selectedDeliveryZone, successUrl: window.location.origin + '/?success=true', cancelUrl: window.location.origin + '/?canceled=true' }) }); const data = await response.json(); if (!response.ok) { throw new Error(data.error || 'Failed to create checkout session'); } if (data.url) { window.location.href = data.url; } } catch (error) { console.error('Checkout error:', error); alert('Checkout failed: ' + error.message); if (stripeBtn) { stripeBtn.disabled = false; stripeBtn.textContent = 'Pay with Card / الدفع بالبطاقة'; } } }
 function openPolicy(type) { document.getElementById("policyText").innerHTML = policies[type]; document.getElementById("policyModal").style.display = "block"; document.body.style.overflow = "hidden"; }
 function closePolicy() { document.getElementById("policyModal").style.display = "none"; document.body.style.overflow = "auto"; }
-function showNotification(message) { const notification = document.createElement('div'); notification.style.cssText = `position: fixed; top: 100px; right: 20px; background: #e07856; color: white; padding: 1.25rem 2.5rem; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.3); z-index: 10000; font-weight: 600; font-size: 1.05rem;`; notification.textContent = message; document.body.appendChild(notification); setTimeout(() => { notification.style.opacity = '0'; notification.style.transition = 'opacity 0.3s'; setTimeout(() => notification.remove(), 300); }, 2500); }
-function toggleAbout() { const aboutSection = document.getElementById('about'); if (aboutSection.style.display === 'none') { aboutSection.style.display = 'block'; aboutSection.scrollIntoView({ behavior: 'smooth' }); } else { aboutSection.style.display = 'none'; } }
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: #e07856;
+        color: white;
+        padding: 1.75rem 3rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        z-index: 10000;
+        font-weight: 700;
+        font-size: 1.25rem;
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.4s';
+        setTimeout(() => notification.remove(), 400);
+    }, 3000);
+}
+
+function toggleAbout() {
+    const aboutSection = document.getElementById('about');
+    const isVisible = aboutSection.style.display !== 'none';
+    
+    if (isVisible) {
+        aboutSection.style.display = 'none';
+    } else {
+        aboutSection.style.display = 'block';
+        aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
 window.onload = () => { createCategoryFilters(); loadProducts(); updateCart(); const urlParams = new URLSearchParams(window.location.search); if (urlParams.get('success') === 'true') { cart = []; saveCart(); updateCart(); showNotification('Payment successful! Thank you for your order.'); window.history.replaceState({}, document.title, window.location.pathname); } else if (urlParams.get('canceled') === 'true') { showNotification('Payment was canceled. Your cart is still saved.'); window.history.replaceState({}, document.title, window.location.pathname); } document.getElementById("searchBtn").onclick = searchProducts; document.getElementById("searchInput").onkeypress = (e) => { if (e.key === "Enter") { e.preventDefault(); searchProducts(); } }; document.getElementById("cartIcon").onclick = toggleCart; document.getElementById("closeCart").onclick = toggleCart; document.getElementById("policyModal").onclick = (e) => { if (e.target.id === "policyModal") { closePolicy(); } }; };
