@@ -51,8 +51,8 @@ nav {
 
 /* ===================== BIGGER LOGO ===================== */
 .logo-img {
-  width: 130px;
-  height: 130px;
+  width: 160px;
+  height: 160px;
 }
 
 /* ===================== SEARCH (BIGGER) ===================== */
@@ -107,7 +107,8 @@ nav {
   margin-top: 2px;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a:hover .arabic-text {
   color: var(--accent);
 }
 
@@ -149,7 +150,7 @@ nav {
 }
 
 .hero-arabic {
-  font-size: 2.5rem;
+  font-size: 3.25rem;
   margin-bottom: 1.5rem;
   font-weight: 700;
 }
@@ -419,16 +420,26 @@ nav {
 }
 
 .term-card h3 {
-  color: var(--primary);
   margin-bottom: 0.5rem;
-  font-size: 1.15rem;
   line-height: 1.6;
 }
 
-.term-card h3 .arabic-text {
+.term-card h3 .term-title {
+  color: var(--primary);
+  font-size: 1.15rem;
+  transition: color 0.3s;
+}
+
+.term-card h3 .term-title-ar {
   font-size: 1.05rem;
   color: #666;
   margin-top: 4px;
+  transition: color 0.3s;
+}
+
+.term-card:hover h3 .term-title,
+.term-card:hover h3 .term-title-ar {
+  color: var(--accent);
 }
 
 .term-card p {
@@ -674,10 +685,27 @@ nav {
   font-size: 2.25rem;
 }
 
+.policy-box h2.arabic-heading {
+  font-family: 'Almarai', sans-serif;
+  direction: rtl;
+  text-align: right;
+  font-size: 2rem;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
 .policy-box p {
   margin-bottom: 1.5rem;
   line-height: 1.8;
   font-size: 1.1rem;
+}
+
+.policy-box p.arabic-text {
+  font-family: 'Almarai', sans-serif;
+  direction: rtl;
+  text-align: right;
+  font-size: 1.05rem;
+  color: #666;
 }
 
 .policy-box ul {
@@ -743,7 +771,7 @@ footer p {
   }
   
   .hero-arabic {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
   
   .products-grid {
@@ -758,8 +786,8 @@ footer p {
   }
 
   .logo-img {
-    width: 90px;
-    height: 90px;
+    width: 110px;
+    height: 110px;
   }
 
   .search-container {
@@ -777,7 +805,7 @@ footer p {
   }
 
   .hero-arabic {
-    font-size: 1.75rem;
+    font-size: 2.25rem;
   }
 
   .hero p {
