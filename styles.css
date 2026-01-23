@@ -371,15 +371,13 @@ nav {
   background: #1e3545;
 }
 
-/* ===================== ABOUT & CONTACT ===================== */
-.about-section,
-.contact-section {
+/* ===================== ABOUT SECTION ===================== */
+.about-section {
   background: white;
   padding: 4rem 0;
 }
 
-.about-section p,
-.contact-section p {
+.about-section p {
   text-align: center;
   max-width: 900px;
   margin: 0 auto 1rem;
@@ -388,8 +386,7 @@ nav {
   line-height: 1.8;
 }
 
-.about-section p.arabic-text,
-.contact-section p.arabic-text {
+.about-section p.arabic-text {
   font-size: 1.15rem;
   color: #666;
   margin-bottom: 2.5rem;
@@ -397,27 +394,68 @@ nav {
   font-weight: 500;
 }
 
-.contact-section p {
-  font-size: 1.15rem;
+/* ===================== CONTACT SECTION ===================== */
+.contact-section {
+  background: white;
+  padding: 4rem 0;
 }
 
-.contact-info {
-  max-width: 700px;
-  margin: 2.5rem auto 0;
+.contact-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+}
+
+.contact-text-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.contact-text-en {
+  text-align: left;
+  font-size: 1.15rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.contact-text-ar {
+  text-align: right;
+  font-size: 1.15rem;
+  color: #555;
+  line-height: 1.8;
+  font-family: 'Almarai', sans-serif;
+  direction: rtl;
+}
+
+.contact-details-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.contact-detail {
   text-align: center;
+  font-size: 1.1rem;
 }
 
-.contact-item {
-  background: #f8f9fa;
-  padding: 1.5rem 2.5rem;
-  margin: 1.25rem 0;
-  border-radius: 8px;
-  font-size: 1.15rem;
-}
-
-.contact-item strong {
+.contact-detail strong {
   color: var(--primary);
-  margin-right: 0.75rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.contact-detail a {
+  color: #e07856;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.contact-detail a:hover {
+  text-decoration: underline;
 }
 
 /* ===================== TERMS SECTION ===================== */
