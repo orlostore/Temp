@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ORLO — Smart Tech & Home Essentials</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -14,13 +14,28 @@
             <img src="logo.png" class="logo-img" alt="ORLO Logo">
         </div>
         <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products...">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | بحث عن المنتجات...">
             <button class="search-btn" id="searchBtn">🔍</button>
         </div>
         <ul class="nav-links">
-            <li><a href="#products">Shop</a></li>
-            <li><a href="#" onclick="toggleAbout(); return false;">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li>
+                <a href="#products">
+                    Shop<br>
+                    <span class="arabic-text">تسوق</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="toggleAbout(); return false;">
+                    About<br>
+                    <span class="arabic-text">من نحن</span>
+                </a>
+            </li>
+            <li>
+                <a href="#contact">
+                    Contact<br>
+                    <span class="arabic-text">اتصل بنا</span>
+                </a>
+            </li>
             <li>
                 <div class="cart-icon" id="cartIcon">
                     🛒 <span class="cart-count" id="cartCount">0</span>
@@ -32,12 +47,20 @@
 
 <section class="hero">
     <h1>Smart Tech & Home Essentials</h1>
+    <p class="arabic-text hero-arabic">التكنولوجيا الذكية ومستلزمات المنزل</p>
     <p>Curated gadgets for your desk, car, and home — delivered across the UAE.</p>
-    <a href="#products" class="btn">Shop Best Sellers</a>
+    <p class="arabic-text">أدوات مختارة لمكتبك وسيارتك ومنزلك - التوصيل لجميع أنحاء الإمارات</p>
+    <a href="#products" class="btn">
+        Shop Best Sellers<br>
+        <span class="arabic-text btn-arabic">تسوق الأكثر مبيعاً</span>
+    </a>
 </section>
 
 <div class="container" id="products">
-    <h2 class="section-title">Best Sellers</h2>
+    <h2 class="section-title">
+        Best Sellers
+        <span class="arabic-text section-arabic">الأكثر مبيعاً</span>
+    </h2>
     <div class="category-filters" id="categoryFilters"></div>
     <div class="products-grid" id="productsGrid"></div>
 </div>
@@ -45,30 +68,43 @@
 <!-- Our Story - Hidden by default, shown when About clicked -->
 <section class="about-section" id="about" style="display: none;">
     <div class="container">
-        <h2 class="section-title">Our Story</h2>
+        <h2 class="section-title">
+            Our Story
+            <span class="arabic-text section-arabic">قصتنا</span>
+        </h2>
         <p>
             ORLO is a family-owned Dubai business focused on practical, high-quality essentials.
             We curate products we actually use — no clutter, no gimmicks.
         </p>
+        <p class="arabic-text">
+            [YOUR ARABIC TRANSLATION HERE - First paragraph]
+        </p>
         <p>
             Every order supports a local UAE business built on trust, simplicity, and fair pricing.
+        </p>
+        <p class="arabic-text">
+            [YOUR ARABIC TRANSLATION HERE - Second paragraph]
         </p>
     </div>
 </section>
 
 <section class="contact-section" id="contact">
     <div class="container">
-        <h2 class="section-title">Get in Touch</h2>
+        <h2 class="section-title">
+            Get in Touch
+            <span class="arabic-text section-arabic">تواصل معنا</span>
+        </h2>
         <p>We'd love to hear from you! Reach out for orders, questions, or support.</p>
+        <p class="arabic-text">[YOUR ARABIC TRANSLATION HERE]</p>
         <div class="contact-info">
             <div class="contact-item">
-                <strong>📍 Location:</strong> Dubai, UAE
+                <strong>📍 Location / الموقع:</strong> Dubai, UAE / دبي، الإمارات
             </div>
             <div class="contact-item">
-                <strong>✉️ Email:</strong> info@orlostore.com
+                <strong>✉️ Email / البريد الإلكتروني:</strong> info@orlostore.com
             </div>
             <div class="contact-item">
-                <strong>📱 WhatsApp:</strong> +971 XX XXX XXXX
+                <strong>📱 WhatsApp / واتساب:</strong> +971 XX XXX XXXX
             </div>
         </div>
     </div>
@@ -77,23 +113,30 @@
 <!-- Terms & Conditions Section -->
 <section class="terms-section" id="terms">
     <div class="container">
-        <h2 class="section-title">Terms & Policies</h2>
+        <h2 class="section-title">
+            Terms & Policies
+            <span class="arabic-text section-arabic">الشروط والسياسات</span>
+        </h2>
         <div class="terms-grid">
             <div class="term-card" onclick="openPolicy('shipping')">
-                <h3>📦 Shipping</h3>
+                <h3>📦 Shipping<br><span class="arabic-text">الشحن</span></h3>
                 <p>Delivery process & timelines</p>
+                <p class="arabic-text">[عملية التوصيل والمواعيد]</p>
             </div>
             <div class="term-card" onclick="openPolicy('returns')">
-                <h3>↩️ Returns</h3>
+                <h3>↩️ Returns<br><span class="arabic-text">الإرجاع</span></h3>
                 <p>7-day return policy</p>
+                <p class="arabic-text">[سياسة الإرجاع خلال ٧ أيام]</p>
             </div>
             <div class="term-card" onclick="openPolicy('privacy')">
-                <h3>🔒 Privacy</h3>
+                <h3>🔒 Privacy<br><span class="arabic-text">الخصوصية</span></h3>
                 <p>How we protect your data</p>
+                <p class="arabic-text">[كيف نحمي بياناتك]</p>
             </div>
             <div class="term-card" onclick="openPolicy('terms')">
-                <h3>📋 Terms</h3>
+                <h3>📋 Terms<br><span class="arabic-text">الشروط</span></h3>
                 <p>General conditions</p>
+                <p class="arabic-text">[الشروط العامة]</p>
             </div>
         </div>
     </div>
@@ -102,7 +145,7 @@
 <!-- Cart Sidebar -->
 <div class="cart-sidebar" id="cartSidebar">
     <div class="cart-header">
-        <h2>Your Cart</h2>
+        <h2>Your Cart / سلة التسوق</h2>
         <button class="close-cart" id="closeCart">✕</button>
     </div>
     <div class="cart-items" id="cartItems"></div>
@@ -126,13 +169,13 @@
 </div>
 
 <footer>
-    <p>&copy; 2026 ORLO — Dubai, UAE</p>
-    <p class="footer-subtitle">Licensed & Family-Owned</p>
+    <p>&copy; 2026 ORLO — Dubai, UAE / دبي، الإمارات</p>
+    <p class="footer-subtitle">Licensed & Family-Owned / مرخص ومملوك عائلياً</p>
     <div class="footer-links">
-        <a href="#" onclick="openPolicy('shipping'); return false;">Shipping</a> |
-        <a href="#" onclick="openPolicy('returns'); return false;">Returns</a> |
-        <a href="#" onclick="openPolicy('privacy'); return false;">Privacy</a> |
-        <a href="#" onclick="openPolicy('terms'); return false;">Terms</a>
+        <a href="#" onclick="openPolicy('shipping'); return false;">Shipping / الشحن</a> |
+        <a href="#" onclick="openPolicy('returns'); return false;">Returns / الإرجاع</a> |
+        <a href="#" onclick="openPolicy('privacy'); return false;">Privacy / الخصوصية</a> |
+        <a href="#" onclick="openPolicy('terms'); return false;">Terms / الشروط</a>
     </div>
 </footer>
 
