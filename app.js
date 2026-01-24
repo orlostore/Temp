@@ -127,6 +127,7 @@ function updateCart() {
     const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0); 
     const deliveryFee = calculateDeliveryFee(subtotal); 
     const total = subtotal + deliveryFee; 
+    const amountNeeded = Math.max(0, 100 - subtotal);
     
     cartCount.textContent = totalItems; 
     
@@ -166,31 +167,48 @@ function updateCart() {
         </div>
     `;
     
-    // Upsell section - only show if under 100 AED AND we have add-on products
+    // Smart product recommendations - only show if under 100 AED
     if (subtotal < 100) {
-        // TODO: When you add strap products to products.js, this section will show them
-        // For now, it's empty but structure is ready
-        footerHTML += `
-            <div style="padding: 1rem 1.5rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 1rem;">
-                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #2c4a5c;">
-                    Add these items to unlock free delivery:
+        const cartProductIds = cart.map(i => i.id);
+        const recommendedProducts = products
+            .filter(p => !cartProductIds.includes(p.id))
+            .filter(p => p.price <= amountNeeded + 30)
+            .sort((a, b) => Math.abs(a.price - amountNeeded) - Math.abs(b.price - amountNeeded))
+            .slice(0, 3);
+        
+        if (recommendedProducts.length > 0) {
+            footerHTML += `
+                <div style="padding: 1rem 1.5rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 1rem;">
+                    <div style="font-weight: 600; margin-bottom: 1rem; color: #2c4a5c; font-size: 1.05rem;">
+                        Add these items to unlock free delivery:
+                    </div>
+                    ${recommendedProducts.map(p => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500; color: #2c4a5c;">${p.name}</div>
+                                <div style="font-size: 0.9rem; color: #888;">${p.price} AED</div>
+                            </div>
+                            <button onclick="addToCart(${p.id}, event)" style="padding: 0.5rem 1rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.95rem; white-space: nowrap;">
+                                Add
+                            </button>
+                        </div>
+                    `).join('')}
                 </div>
-                <!-- When you add products later, they'll appear here as checkboxes -->
-                <div style="color: #888; font-size: 0.95rem; padding: 1rem; text-align: center;">
-                    Add-on products coming soon
-                </div>
-            </div>
-        `;
+            `;
+        }
     }
     
-    // Checkout button (always shown)
+    // Checkout buttons section with OR
     footerHTML += `
-        <div style="text-align: center; margin: 1rem 0 0.5rem; font-weight: 600; color: #666;">
+        <div style="text-align: center; margin: 1rem 0 0.5rem; font-weight: 600; color: #666; font-size: 1.1rem;">
             OR
         </div>
         <div style="padding: 0 1.5rem 1.5rem;">
-            <button style="width: 100%; padding: 1.2rem; font-size: 1.1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #25D366; color: white; transition: all 0.3s;" onclick="checkout()" onmouseover="this.style.background='#20BA5A'" onmouseout="this.style.background='#25D366'">
-                Proceed to Checkout / متابعة الدفع
+            <button style="width: 100%; padding: 1.2rem; font-size: 1.1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #25D366; color: white; transition: all 0.3s; margin-bottom: 0.75rem;" onclick="checkout()" onmouseover="this.style.background='#20BA5A'" onmouseout="this.style.background='#25D366'">
+                💬 Proceed to Checkout / متابعة الدفع
+            </button>
+            <button style="width: 100%; padding: 1.2rem; font-size: 1.1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" onclick="alert('Stripe payment coming soon! / الدفع عبر سترايب قريباً!')" onmouseover="this.style.background='#0052CC'" onmouseout="this.style.background='#0066FF'">
+                💳 Pay with Card / الدفع بالبطاقة (Coming Soon)
             </button>
         </div>
     `;
