@@ -310,6 +310,12 @@ nav {
   color: white;
 }
 
+.category-arabic {
+  font-size: 0.9rem;
+  margin-top: 3px;
+  display: block;
+}
+
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
