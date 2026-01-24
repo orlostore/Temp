@@ -158,7 +158,7 @@ function updateCart() {
             .filter(p => !cartProductIds.includes(p.id))
             .filter(p => p.price <= amountNeeded + 30)
             .sort((a, b) => Math.abs(a.price - amountNeeded) - Math.abs(b.price - amountNeeded))
-            .slice(0, 3);
+            .slice(0, 2);
         
         if (recommendedProducts.length > 0) {
             footerHTML += `
