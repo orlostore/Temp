@@ -130,24 +130,20 @@ function updateCart() {
     const amountNeeded = Math.max(0, 100 - subtotal);
     
     cartCount.textContent = totalItems; 
-    const mobileCartCount = document.getElementById("mobileCartCount");
-    if (mobileCartCount) {
-        mobileCartCount.textContent = totalItems;
-    } 
     
     // Cart items display (top section - already in cartItems div)
     cartItems.innerHTML = cart.map(i => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; border-bottom:1px solid #eee;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; border-bottom:1px solid #eee;">
             <div style="flex:1;">
-                <strong style="font-size:0.9rem; color:#2c4a5c;">${i.name}</strong><br>
-                <span style="color:#888; font-size:0.8rem;">${i.price} AED × ${i.quantity}</span>
-                <span style="color:#e07856; font-weight:600; font-size:0.9rem; margin-left:0.5rem;">${(i.price * i.quantity).toFixed(2)} AED</span>
+                <strong style="font-size:1rem; color:#2c4a5c;">${i.name}</strong><br>
+                <span style="color:#888; font-size:0.9rem;">${i.price} AED × ${i.quantity}</span><br>
+                <span style="color:#e07856; font-weight:600; font-size:1rem;">${(i.price * i.quantity).toFixed(2)} AED</span>
             </div>
-            <div style="display:flex; gap:0.4rem; align-items:center;">
-                <button onclick="updateQuantity(${i.id}, -1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.9rem; font-weight:600;">-</button>
-                <span style="font-size:0.9rem; font-weight:600; min-width:20px; text-align:center;">${i.quantity}</span>
-                <button onclick="updateQuantity(${i.id}, 1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.9rem; font-weight:600;">+</button>
-                <button onclick="removeFromCart(${i.id})" style="padding:0.3rem 0.6rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.2rem; font-size:0.9rem;">✕</button>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <button onclick="updateQuantity(${i.id}, -1)" style="padding:0.4rem 0.8rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:1rem; font-weight:600;">-</button>
+                <span style="font-size:1rem; font-weight:600; min-width:25px; text-align:center;">${i.quantity}</span>
+                <button onclick="updateQuantity(${i.id}, 1)" style="padding:0.4rem 0.8rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:1rem; font-weight:600;">+</button>
+                <button onclick="removeFromCart(${i.id})" style="padding:0.4rem 0.8rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.3rem; font-size:1rem;">✕</button>
             </div>
         </div>
     `).join(""); 
@@ -162,21 +158,21 @@ function updateCart() {
             .filter(p => !cartProductIds.includes(p.id))
             .filter(p => p.price <= amountNeeded + 30)
             .sort((a, b) => Math.abs(a.price - amountNeeded) - Math.abs(b.price - amountNeeded))
-            .slice(0, 2);
+            .slice(0, 3);
         
         if (recommendedProducts.length > 0) {
             footerHTML += `
-                <div style="padding: 0.5rem 0.75rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 0.5rem;">
-                    <div style="font-weight: 600; margin-bottom: 0.5rem; color: #2c4a5c; font-size: 0.85rem;">
+                <div style="padding: 0.75rem 1rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.75rem;">
+                    <div style="font-weight: 600; margin-bottom: 0.75rem; color: #2c4a5c; font-size: 0.95rem;">
                         Add these items to unlock free delivery:
                     </div>
                     ${recommendedProducts.map(p => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid #f0f0f0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">
                             <div style="flex: 1;">
-                                <div style="font-weight: 500; color: #2c4a5c; font-size: 0.85rem;">${p.name}</div>
-                                <div style="font-size: 0.75rem; color: #888;">${p.price} AED</div>
+                                <div style="font-weight: 500; color: #2c4a5c; font-size: 0.9rem;">${p.name}</div>
+                                <div style="font-size: 0.85rem; color: #888;">${p.price} AED</div>
                             </div>
-                            <button onclick="addToCart(${p.id}, event)" style="padding: 0.3rem 0.7rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; white-space: nowrap;">
+                            <button onclick="addToCart(${p.id}, event)" style="padding: 0.4rem 0.8rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; white-space: nowrap;">
                                 Add
                             </button>
                         </div>
@@ -188,27 +184,39 @@ function updateCart() {
     
     // 2. SUMMARY SECTION (always shown)
     footerHTML += `
-        <div style="padding: 0.75rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 0.5rem;">
-            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.95rem; color: #2c4a5c;">
+        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 1rem; color: #2c4a5c;">
                 <span>Subtotal / المجموع الفرعي:</span>
                 <span>${subtotal.toFixed(2)} AED</span>
             </div>
-            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.95rem; color: #2c4a5c;">
+            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 1rem; color: #2c4a5c;">
                 <span>Delivery / التوصيل:</span>
                 <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE / مجاني' : deliveryFee.toFixed(2) + ' AED'}</span>
             </div>
-            <div style="border-top: 2px solid #ddd; margin: 0.3rem 0;"></div>
-            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0 0.3rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;">
+            <div style="border-top: 2px solid #ddd; margin: 0.4rem 0;"></div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.4rem; font-size: 1.2rem; font-weight: 700; color: #2c4a5c;">
                 <span>Total / الإجمالي:</span>
                 <span>${total.toFixed(2)} AED</span>
             </div>
         </div>
     `;
     
-    // 3. CHECKOUT BUTTON (Stripe only - no OR, no WhatsApp)
+    // 3. OR (only if under 100)
+    if (subtotal < 100) {
+        footerHTML += `
+            <div style="text-align: center; margin: 0.5rem 0; font-weight: 600; color: #666; font-size: 1rem;">
+                OR
+            </div>
+        `;
+    }
+    
+    // 4. CHECKOUT BUTTONS (always shown)
     footerHTML += `
-        <div style="padding: 0 0.75rem 0.75rem;">
-            <button style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" onclick="alert('Stripe payment coming soon! / الدفع عبر سترايب قريباً!')" onmouseover="this.style.background='#0052CC'" onmouseout="this.style.background='#0066FF'">
+        <div style="padding: 0 1rem 1rem;">
+            <button style="width: 100%; padding: 1rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #25D366; color: white; transition: all 0.3s; margin-bottom: 0.5rem;" onclick="checkout()" onmouseover="this.style.background='#20BA5A'" onmouseout="this.style.background='#25D366'">
+                💬 Proceed to Checkout / متابعة الدفع
+            </button>
+            <button style="width: 100%; padding: 1rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" onclick="alert('Stripe payment coming soon! / الدفع عبر سترايب قريباً!')" onmouseover="this.style.background='#0052CC'" onmouseout="this.style.background='#0066FF'">
                 💳 Pay with Card / الدفع بالبطاقة (Coming Soon)
             </button>
         </div>
@@ -383,10 +391,6 @@ window.onload = () => {
         } 
     }; 
     document.getElementById("cartIcon").onclick = toggleCart; 
-    const mobileCartIcon = document.getElementById("mobileCartIcon");
-    if (mobileCartIcon) {
-        mobileCartIcon.onclick = toggleCart;
-    }
     document.getElementById("closeCart").onclick = toggleCart; 
     document.getElementById("policyModal").onclick = (e) => { 
         if (e.target.id === "policyModal") { 
