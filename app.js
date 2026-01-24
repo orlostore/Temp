@@ -133,17 +133,17 @@ function updateCart() {
     
     // Cart items display (top section - already in cartItems div)
     cartItems.innerHTML = cart.map(i => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:1.5rem; border-bottom:1px solid #eee;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; border-bottom:1px solid #eee;">
             <div style="flex:1;">
-                <strong style="font-size:1.1rem; color:#2c4a5c;">${i.name}</strong><br>
-                <span style="color:#888; font-size:1rem;">${i.price} AED × ${i.quantity}</span><br>
-                <span style="color:#e07856; font-weight:600; font-size:1.1rem;">${(i.price * i.quantity).toFixed(2)} AED</span>
+                <strong style="font-size:1rem; color:#2c4a5c;">${i.name}</strong><br>
+                <span style="color:#888; font-size:0.9rem;">${i.price} AED × ${i.quantity}</span><br>
+                <span style="color:#e07856; font-weight:600; font-size:1rem;">${(i.price * i.quantity).toFixed(2)} AED</span>
             </div>
-            <div style="display:flex; gap:0.75rem; align-items:center;">
-                <button onclick="updateQuantity(${i.id}, -1)" style="padding:0.5rem 1rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:1.1rem; font-weight:600;">-</button>
-                <span style="font-size:1.1rem; font-weight:600; min-width:30px; text-align:center;">${i.quantity}</span>
-                <button onclick="updateQuantity(${i.id}, 1)" style="padding:0.5rem 1rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:1.1rem; font-weight:600;">+</button>
-                <button onclick="removeFromCart(${i.id})" style="padding:0.5rem 1rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.5rem; font-size:1.1rem;">✕</button>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <button onclick="updateQuantity(${i.id}, -1)" style="padding:0.4rem 0.8rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:1rem; font-weight:600;">-</button>
+                <span style="font-size:1rem; font-weight:600; min-width:25px; text-align:center;">${i.quantity}</span>
+                <button onclick="updateQuantity(${i.id}, 1)" style="padding:0.4rem 0.8rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:1rem; font-weight:600;">+</button>
+                <button onclick="removeFromCart(${i.id})" style="padding:0.4rem 0.8rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.3rem; font-size:1rem;">✕</button>
             </div>
         </div>
     `).join(""); 
