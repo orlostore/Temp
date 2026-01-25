@@ -287,12 +287,25 @@ function showNotification(message, clickEvent) {
     let leftPos = '50%';
     let transform = 'translateX(-50%)';
     
+    // If we have the click event, find the product card and center notification over it
     if (clickEvent && clickEvent.target) {
         const button = clickEvent.target;
-        const rect = button.getBoundingClientRect();
-        topPos = (rect.top + window.scrollY - 80) + 'px';
-        leftPos = (rect.left + rect.width + 20) + 'px';
-        transform = 'translateX(0)';
+        // Find the parent product card
+        const productCard = button.closest('.product-card');
+        
+        if (productCard) {
+            const cardRect = productCard.getBoundingClientRect();
+            // Position notification centered horizontally over the card, slightly above it
+            topPos = (cardRect.top + window.scrollY - 60) + 'px';
+            leftPos = (cardRect.left + cardRect.width / 2) + 'px';
+            transform = 'translateX(-50%)'; // Center horizontally
+        } else {
+            // Fallback if product card not found
+            const rect = button.getBoundingClientRect();
+            topPos = (rect.top + window.scrollY - 60) + 'px';
+            leftPos = (rect.left + rect.width / 2) + 'px';
+            transform = 'translateX(-50%)';
+        }
     }
     
     notification.style.cssText = `
@@ -302,12 +315,12 @@ function showNotification(message, clickEvent) {
         transform: ${transform};
         background: #e07856;
         color: white;
-        padding: 1rem 2rem;
+        padding: 0.75rem 1.5rem;
         border-radius: 8px;
         box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         z-index: 10000;
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 0.95rem;
         animation: slideIn 0.3s ease-out;
         white-space: nowrap;
     `;
@@ -317,11 +330,11 @@ function showNotification(message, clickEvent) {
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: ${transform} scale(0.8);
+                transform: ${transform} translateY(-10px) scale(0.9);
             }
             to {
                 opacity: 1;
-                transform: ${transform} scale(1);
+                transform: ${transform} translateY(0) scale(1);
             }
         }
     `;
