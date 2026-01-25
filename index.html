@@ -8,30 +8,23 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- Browser Detection Script - Must be first -->
+    <!-- Browser Detection Script - Runs after DOM loads -->
     <script>
-    (function() {
-        const userAgent = navigator.userAgent.toLowerCase();
-        const isChrome = /chrome/.test(userAgent) && !/edg/.test(userAgent) && !/opr/.test(userAgent);
-        const isSafari = /safari/.test(userAgent) && !/chrome/.test(userAgent);
-        const isEdge = /edg/.test(userAgent);
-        
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', addBrowserClass);
-        } else {
-            addBrowserClass();
+    // Detect Chrome specifically (not Edge)
+    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor) && !/Edg/.test(navigator.userAgent);
+    
+    // Add class immediately when script runs
+    if (isChrome) {
+        document.documentElement.classList.add('chrome-browser');
+    }
+    
+    // Also add when DOM loads (backup)
+    window.addEventListener('DOMContentLoaded', function() {
+        if (isChrome) {
+            document.documentElement.classList.add('chrome-browser');
+            document.body.classList.add('chrome-browser');
         }
-        
-        function addBrowserClass() {
-            if (isChrome) {
-                document.body.classList.add('chrome');
-            } else if (isSafari) {
-                document.body.classList.add('safari');
-            } else if (isEdge) {
-                document.body.classList.add('edge');
-            }
-        }
-    })();
+    });
     </script>
 </head>
 <body>
@@ -116,7 +109,7 @@
             </div>
             <div class="contact-details-row">
                 <div class="contact-detail"><strong>📍 Location:</strong> Dubai, UAE (Online Only)</div>
-                <div class="contact-detail"><strong>✉️ Email:</strong> <a href="mailto:info@orlostore.com">info@orlostore.com</a></div>
+                <div class="contact-detail"><strong>✉️ Email:</strong> <a href="/cdn-cgi/l/email-protection#056c6b636a456a77696a76716a77602b666a68"><span class="__cf_email__" data-cfemail="4821262e2708273a24273b3c273a2d662b2725">[email&#160;protected]</span></a></div>
                 <div class="contact-detail"><strong>📱 WhatsApp:</strong> <a href="https://wa.me/971XXXXXXXXX" target="_blank">+971 XX XXX XXXX</a></div>
             </div>
         </div>
@@ -169,10 +162,4 @@
 
 <footer>
     <p>&copy; 2026 ORLO — Dubai, UAE / دبي، الإمارات العربية المتحدة</p>
-    <p class="footer-subtitle">Licensed & Family-Owned / مرخصة ومملوكة للعائلة</p>
-</footer>
-
-<script src="products.js"></script>
-<script src="app.js"></script>
-</body>
-</html>
+    <p class="footer-subtitle">Licensed & Family-Owned / مرخ
