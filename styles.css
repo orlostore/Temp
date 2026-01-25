@@ -74,12 +74,13 @@ header {
 }
 
 nav {
-  max-width: 1072.0px;
+  max-width: 1400px; /* Increased for wider layout */
   margin: auto;
-  padding: 0.67rem 1.13rem; /* 1.01rem × 0.67, 1.68rem × 0.67 */
+  padding: 0.8rem 2rem; /* Increased padding */
   display: flex;
   align-items: center;
-  gap: 0.9rem; /* 1.34rem × 0.67 */
+  gap: 1.5rem; /* Increased gap between elements */
+  justify-content: space-between; /* Better distribution */
 }
 
 .logo-img {
@@ -120,7 +121,7 @@ nav {
 
 .search-container {
   flex: 1;
-  max-width: 314.23px; /* 469.0px × 0.67 */
+  max-width: 550px; /* Increased for longer search bar */
   display: flex;
 }
 
@@ -129,7 +130,7 @@ nav {
   padding: 0.67rem 1.01rem;
   border: 2px solid #ddd;
   border-radius: 18.76px 0 0 18.76px;
-  font-size: 0.74rem; /* Increased from 0.7rem */
+  font-size: 0.9rem; /* Increased for readability */
 }
 
 .search-btn {
@@ -175,14 +176,14 @@ nav {
 
 .cart-icon {
   position: relative;
-  font-size: 2rem;
+  font-size: 1.5rem; /* Reduced from 2rem */
   cursor: pointer;
 }
 
 .mobile-cart-icon {
   display: none;
   position: relative;
-  font-size: 1.8rem;
+  font-size: 1.3rem; /* Reduced from 1.8rem */
   cursor: pointer;
   order: 3;
 }
