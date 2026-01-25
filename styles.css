@@ -74,13 +74,19 @@ header {
 }
 
 nav {
-  max-width: 1400px; /* Increased for wider layout */
+  max-width: 1400px;
   margin: auto;
-  padding: 0.8rem 2rem; /* Increased padding */
+  padding: 0.8rem 2rem;
   display: flex;
   align-items: center;
-  gap: 1.5rem; /* Increased gap between elements */
-  justify-content: space-between; /* Better distribution */
+  gap: 0;
+}
+
+.logo-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .logo-img {
@@ -120,9 +126,10 @@ nav {
 }
 
 .search-container {
-  flex: 1;
-  max-width: 550px; /* Increased for longer search bar */
+  flex: 2;
+  max-width: 550px;
   display: flex;
+  margin: 0 2rem;
 }
 
 .search-input {
@@ -144,9 +151,13 @@ nav {
 }
 
 .nav-links {
+  flex: 1;
   display: flex;
-  gap: 1.34rem;
+  gap: 0;
   list-style: none;
+  align-items: center;
+  justify-content: space-around;
+}
   align-items: center;
 }
 
@@ -190,14 +201,14 @@ nav {
 
 .cart-count {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: -6px;
+  right: -6px;
   background: var(--accent);
   color: white;
-  width: 16.08px;
-  height: 16.08px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  font-size: .56.95rem;
+  font-size: 0.65rem;
   display: flex;
   align-items: center;
   justify-content: center;
