@@ -148,7 +148,7 @@ function updateCart() {
         </div>
     `).join(""); 
     
-    // Build cart footer: UPSELL FIRST, then SUMMARY, then BUTTONS
+    // Build cart footer: UPSELL FIRST, then SUMMARY, then BUTTON
     let footerHTML = '';
     
     // 1. UPSELL SECTION (only if under 100 AED)
@@ -201,21 +201,9 @@ function updateCart() {
         </div>
     `;
     
-    // 3. OR (only if under 100)
-    if (subtotal < 100) {
-        footerHTML += `
-            <div style="text-align: center; margin: 1rem 0 0.5rem; font-weight: 600; color: #666; font-size: 1.1rem;">
-                OR
-            </div>
-        `;
-    }
-    
-    // 4. CHECKOUT BUTTONS (always shown)
+    // 3. CHECKOUT BUTTON (always shown)
     footerHTML += `
         <div style="padding: 0 1.5rem 1.5rem;">
-            <button style="width: 100%; padding: 1.2rem; font-size: 1.1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #25D366; color: white; transition: all 0.3s; margin-bottom: 0.75rem;" onclick="checkout()" onmouseover="this.style.background='#20BA5A'" onmouseout="this.style.background='#25D366'">
-                💬 Proceed to Checkout / متابعة الدفع
-            </button>
             <button style="width: 100%; padding: 1.2rem; font-size: 1.1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" onclick="alert('Stripe payment coming soon! / الدفع عبر سترايب قريباً!')" onmouseover="this.style.background='#0052CC'" onmouseout="this.style.background='#0066FF'">
                 💳 Pay with Card / الدفع بالبطاقة (Coming Soon)
             </button>
