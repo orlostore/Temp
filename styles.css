@@ -62,13 +62,13 @@ body {
 
 /* ============================================
    CHROME-ONLY FONT FIX - AGGRESSIVE APPROACH
-   Increases zoom level for Chrome by 25%
+   Increases zoom level for Chrome by 35%
    ============================================ */
 
 /* Chrome-specific hack using @supports */
 @supports (-webkit-appearance:none) and (not (-ms-ime-align:auto)) and (not (-moz-appearance:none)) {
   html {
-    zoom: 1.25;
+    zoom: 1.35;
   }
 }
 
@@ -76,7 +76,7 @@ body {
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @supports (-webkit-appearance:none) and (not (overflow:-webkit-marquee)) and (not (-ms-ime-align:auto)) {
     html {
-      zoom: 1.25 !important;
+      zoom: 1.35 !important;
     }
   }
 }
