@@ -57,15 +57,23 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
-  font-size: 18.88px; /* Increased from 16px to 18.88px (18% larger) for better readability */
+  font-size: 16px;
 }
 
 /* ============================================
-   Base font size increased to 18.88px (18% larger)
-   for better readability across all browsers
+   CHROME-ONLY FONT FIX
+   Uses CSS @supports hack to target Chrome specifically
+   Edge and Safari are left untouched
    ============================================ */
 
-/* End of font adjustments */
+/* Target Chrome only - this works because Chrome supports -webkit-appearance but Edge doesn't in the same way */
+@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm) {
+  body {
+    font-size: 18.88px !important; /* 18% larger for Chrome only */
+  }
+}
+
+/* End of Chrome-only adjustments */
 
 header {
   background: var(--white);
