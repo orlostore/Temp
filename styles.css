@@ -57,7 +57,7 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
-  font-size: 22px; /* TEST SIZE - very large to see if Chrome responds */
+  font-size: 19px;
 }
 
 /* Chrome font will be set to 23px via JavaScript at page load */
