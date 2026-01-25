@@ -218,7 +218,7 @@ nav {
 .hero {
   background: linear-gradient(135deg, var(--primary), #3a5f75);
   color: #fff;
-  padding: 1rem 1.34rem 2rem 1.34rem; /* Top: 1rem (half), Bottom: 2rem (same) */
+  padding: 2rem 1.34rem 1rem 1.34rem; /* Bottom reduced to 1rem (50% of 2rem) */
   text-align: center;
   transition: display 0.3s;
 }
@@ -245,7 +245,7 @@ nav {
   font-size: 0.77rem;
   opacity: .95;
   max-width: 536.0px;
-  margin: 0 auto 0.4rem;
+  margin: 0 auto 1.3rem; /* Increased from 0.4rem to match other sections */
   line-height: 1.4;
 }
 
