@@ -218,7 +218,7 @@ nav {
 .hero {
   background: linear-gradient(135deg, var(--primary), #3a5f75);
   color: #fff;
-  padding: 2rem 1.34rem 1rem 1.34rem; /* Bottom reduced to 1rem (50% of 2rem) */
+  padding: 1rem 1.34rem 1rem 1.34rem; /* Top reduced to 1rem (50% of 2rem) */
   text-align: center;
   transition: display 0.3s;
 }
@@ -236,7 +236,7 @@ nav {
 
 .hero-arabic {
   font-size: 1.84rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 1.3rem; /* Increased to match arabic-desc → badges spacing */
   font-weight: 700;
   line-height: 1.2;
 }
@@ -245,7 +245,7 @@ nav {
   font-size: 0.77rem;
   opacity: .95;
   max-width: 536.0px;
-  margin: 0 auto 1.3rem; /* Increased from 0.4rem to match other sections */
+  margin: 0 auto 1.3rem; /* Increased to match other large sections */
   line-height: 1.4;
 }
 
