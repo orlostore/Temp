@@ -295,14 +295,14 @@ function showNotification(message, clickEvent) {
         
         if (productCard) {
             const cardRect = productCard.getBoundingClientRect();
-            // Position notification centered horizontally over the card, slightly above it
-            topPos = (cardRect.top + window.scrollY - 20) + 'px'; // Changed from -60 to -20
+            // Position notification centered both horizontally AND vertically over the card
+            topPos = (cardRect.top + window.scrollY + (cardRect.height / 2) - 20) + 'px'; // Center vertically (minus half notification height)
             leftPos = (cardRect.left + cardRect.width / 2) + 'px';
             transform = 'translateX(-50%)'; // Center horizontally
         } else {
             // Fallback if product card not found
             const rect = button.getBoundingClientRect();
-            topPos = (rect.top + window.scrollY - 20) + 'px'; // Changed from -60 to -20
+            topPos = (rect.top + window.scrollY - 20) + 'px';
             leftPos = (rect.left + rect.width / 2) + 'px';
             transform = 'translateX(-50%)';
         }
