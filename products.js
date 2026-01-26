@@ -10,7 +10,7 @@ const products = [
     category: "Workspace",
     featured: true,
     image: "📦",
-    images: ["📦"],
+    images: ["📦", "📦", "📦", "📦", "📦"], // 5 images for gallery
     colors: "Black-Multi",
     colorsAr: "أسود، متعدد الألوان",
     packaging: "Each set separately (50 packages)",
