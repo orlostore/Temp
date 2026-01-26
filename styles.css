@@ -432,14 +432,27 @@ nav {
   font-weight: 600;
   color: var(--primary);
   margin: 0.67rem 0 0.5rem;
-  font-size: 1.01rem; /* Increased from 0.87rem for better readability */
+  font-size: 1.01rem;
+  height: 2.8rem; /* Fixed height for 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
 }
 
 .product-info p {
-  font-size: 0.77rem; /* Increased from 0.7rem */
+  font-size: 0.77rem;
   color: #666;
   margin-bottom: 0.84rem;
-  line-height: 1.6;
+  line-height: 1.5;
+  height: 2.3rem; /* Fixed height for 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .product-price {
