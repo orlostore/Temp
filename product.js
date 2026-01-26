@@ -74,11 +74,71 @@ if (product.specifications && product.specifications.length > 0) {
 document.getElementById("productDescription").innerHTML = descriptionHTML;
 document.getElementById("productPrice").innerText = product.price + " AED";
 
-// Display images
+// Display images - Amazon-style gallery
 const gallery = document.getElementById("gallery");
-gallery.innerHTML = product.images
-  .map(img => `<img src="${img}" alt="${product.name}" style="font-size:64px; text-align:center; display:block; margin:0.8rem auto;">`)
-  .join("");
+
+if (product.images && product.images.length > 0) {
+  // Main image container
+  let galleryHTML = `
+    <div class="image-gallery">
+      <div class="main-image-container">
+        <img id="mainImage" src="${product.images[0]}" alt="${product.name}" class="main-product-image">
+        <div class="zoom-hint">🔍 Click to zoom</div>
+      </div>
+      <div class="thumbnail-strip">
+        ${product.images.map((img, index) => `
+          <img src="${img}" 
+               alt="${product.name} ${index + 1}" 
+               class="thumbnail ${index === 0 ? 'active' : ''}" 
+               onclick="changeMainImage('${img}', ${index})"
+               style="cursor:pointer;">
+        `).join('')}
+      </div>
+    </div>
+  `;
+  
+  gallery.innerHTML = galleryHTML;
+}
+
+// Function to change main image when thumbnail clicked
+window.changeMainImage = function(imgSrc, index) {
+  const mainImg = document.getElementById('mainImage');
+  mainImg.src = imgSrc;
+  
+  // Update active thumbnail
+  document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+    thumb.classList.toggle('active', i === index);
+  });
+};
+
+// Zoom/Lightbox functionality
+document.addEventListener('DOMContentLoaded', () => {
+  const mainImg = document.getElementById('mainImage');
+  if (mainImg) {
+    mainImg.style.cursor = 'zoom-in';
+    mainImg.onclick = () => {
+      // Create lightbox
+      const lightbox = document.createElement('div');
+      lightbox.className = 'lightbox';
+      lightbox.innerHTML = `
+        <div class="lightbox-content">
+          <span class="lightbox-close">&times;</span>
+          <img src="${mainImg.src}" alt="${product.name}" class="lightbox-image">
+        </div>
+      `;
+      document.body.appendChild(lightbox);
+      document.body.style.overflow = 'hidden';
+      
+      // Close lightbox
+      lightbox.onclick = (e) => {
+        if (e.target === lightbox || e.target.className === 'lightbox-close') {
+          document.body.removeChild(lightbox);
+          document.body.style.overflow = 'auto';
+        }
+      };
+    };
+  }
+});
 
 // Add to cart functionality (uses same cart logic as main page)
 document.getElementById("addToCartBtn").onclick = () => {
