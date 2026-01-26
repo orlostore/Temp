@@ -307,7 +307,7 @@ nav {
 }
 
 .container {
-  max-width: 1072.0px;
+  max-width: 1234px; /* Increased to fit 5 products per row */
   margin: auto;
   padding: 2.35rem 1.68rem;
 }
@@ -374,7 +374,7 @@ nav {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(214.4px, 214.4px)); /* Fixed box size */
   gap: 1.68rem;
-  max-width: 1286px; /* 1072px + 214px = space for 5 products */
+  max-width: 1180px; /* Fits exactly 5 products + gaps */
   margin: 0 auto;
   justify-content: center;
 }
