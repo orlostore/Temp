@@ -494,7 +494,7 @@ nav {
 }
 
 .contact-container {
-  max-width: 1072.0px;
+  max-width: 1234px; /* Match products container width */
   margin: 2.35rem auto;
   padding: 0 1.68rem;
 }
