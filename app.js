@@ -54,7 +54,23 @@ function renderProducts(list) {
         grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#999;padding:3rem;">No products found</p>`; 
         return; 
     } 
-    grid.innerHTML = list.map(p => `<div class="product-card">${p.featured ? `<span class="badge">Best Seller</span>` : ""}<div class="product-image">${p.image}</div><div class="product-info"><small>${p.category}</small><h3 class="product-title">${p.name}</h3><p>${p.description}</p><div class="product-price">${p.price} AED</div><button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart</button></div></div>`).join(""); 
+    grid.innerHTML = list.map(p => `
+        <div class="product-card">
+            ${p.featured ? `<span class="badge">Best Seller</span>` : ""}
+            <a href="product.html?product=${p.slug}" style="text-decoration:none;">
+                <div class="product-image">${p.image}</div>
+            </a>
+            <div class="product-info">
+                <small>${p.category}</small>
+                <a href="product.html?product=${p.slug}" style="text-decoration:none; color:inherit;">
+                    <h3 class="product-title">${p.name}</h3>
+                </a>
+                <p>${p.description}</p>
+                <div class="product-price">${p.price} AED</div>
+                <button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart</button>
+            </div>
+        </div>
+    `).join(""); 
 }
 
 function loadProducts(category = "All Products") { 
