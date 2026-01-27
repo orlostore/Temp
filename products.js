@@ -10,27 +10,15 @@ const products = [
     category: "Workspace",
     featured: true,
     image: "📦",
-    images: ["📦", "📦", "📦", "📦", "📦"], // 5 images for gallery
+    images: ["📦", "📦", "📦", "📦", "📦"],
     colors: "Black-Multi",
     colorsAr: "أسود، متعدد الألوان",
     packaging: "Each set separately (50 packages)",
     packagingAr: "كل مجموعة منفصلة (50 عبوة)",
-    detailedDescription: "Professional 300-piece cable management solution with fast adhesive backing. Perfect for organizing cables at your desk, home entertainment center, or office workspace. Includes various sizes of cable clips, ties, and holders to keep all your cables neat and tangle-free.",
-    detailedDescriptionAr: "حل احترافي لإدارة الكابلات مكون من 300 قطعة مع ظهر لاصق سريع. مثالي لتنظيم الكابلات على مكتبك أو مركز الترفيه المنزلي أو مساحة العمل. يشمل أحجام مختلفة من مشابك الكابلات والروابط والحوامل للحفاظ على جميع كابلاتك منظمة وخالية من التشابك.",
-    specifications: [
-      "300 pieces total",
-      "Fast adhesive backing",
-      "Multiple sizes included",
-      "Black and multicolor options",
-      "Reusable design"
-    ],
-    specificationsAr: [
-      "إجمالي 300 قطعة",
-      "ظهر لاصق سريع",
-      "أحجام متعددة مشمولة",
-      "خيارات أسود ومتعدد الألوان",
-      "تصميم قابل لإعادة الاستخدام"
-    ]
+    detailedDescription: "Professional 300-piece cable management solution with fast adhesive backing.",
+    detailedDescriptionAr: "حل احترافي لإدارة الكابلات مكون من 300 قطعة مع ظهر لاصق سريع.",
+    specifications: ["300 pieces total", "Fast adhesive backing"],
+    specificationsAr: ["إجمالي 300 قطعة", "ظهر لاصق سريع"]
   },
   {
     id: 2,
@@ -46,26 +34,12 @@ const products = [
     images: ["🎨"],
     colors: "Red, Blue, Green, Black, Yellow",
     colorsAr: "أحمر، أزرق، أخضر، أسود، أصفر",
-    packaging: "Each pack contains (10 Red, 10 Blue, 10 Green, 10 Black, 10 Yellow)",
-    packagingAr: "كل عبوة تحتوي على (10 أحمر، 10 أزرق، 10 أخضر، 10 أسود، 10 أصفر)",
-    detailedDescription: "Eco-friendly double-sided strong adhesive reusable adjustable washable hook loop straps. Perfect for organizing cables, securing items, or bundling cords. Each 15cm strap is durable, washable, and can be reused hundreds of times. Color-coded system makes cable identification easy.",
-    detailedDescriptionAr: "أشرطة حلقية صديقة للبيئة ذات وجهين لاصقة قوية قابلة لإعادة الاستخدام وقابلة للغسل. مثالية لتنظيم الكابلات أو تأمين الأشياء أو ربط الأسلاك. كل شريط 15 سم متين وقابل للغسل ويمكن إعادة استخدامه مئات المرات. نظام ترميز الألوان يجعل تحديد الكابلات سهلاً.",
-    specifications: [
-      "Length: 15cm each",
-      "50 pieces total (10 of each color)",
-      "Eco-friendly materials",
-      "Double-sided adhesive",
-      "Washable and reusable",
-      "Colors: Red, Blue, Green, Black, Yellow"
-    ],
-    specificationsAr: [
-      "الطول: 15 سم لكل قطعة",
-      "50 قطعة إجمالي (10 من كل لون)",
-      "مواد صديقة للبيئة",
-      "لاصق على الوجهين",
-      "قابل للغسل وإعادة الاستخدام",
-      "الألوان: أحمر، أزرق، أخضر، أسود، أصفر"
-    ]
+    packaging: "Each pack contains 50 pieces",
+    packagingAr: "كل عبوة تحتوي على 50 قطعة",
+    detailedDescription: "Eco-friendly double-sided strong adhesive reusable straps.",
+    detailedDescriptionAr: "أشرطة حلقية صديقة للبيئة ذات وجهين لاصقة قوية قابلة لإعادة الاستخدام.",
+    specifications: ["Length: 15cm", "50 pieces total"],
+    specificationsAr: ["الطول: 15 سم", "50 قطعة إجمالي"]
   },
   {
     id: 3,
@@ -81,26 +55,12 @@ const products = [
     images: ["⚫"],
     colors: "Black",
     colorsAr: "أسود",
-    packaging: "Each pack contains (50 Black)",
-    packagingAr: "كل عبوة تحتوي على (50 أسود)",
-    detailedDescription: "Professional-grade black hook loop straps for a clean, uniform look in any workspace. Double-sided eco-friendly strong adhesive with reusable, adjustable, and washable design. Ideal for professional installations, home theaters, or office cable management where aesthetics matter.",
-    detailedDescriptionAr: "أشرطة حلقية سوداء احترافية للحصول على مظهر نظيف وموحد في أي مساحة عمل. لاصق قوي صديق للبيئة ذو وجهين مع تصميم قابل لإعادة الاستخدام وقابل للتعديل والغسل. مثالي للتركيبات الاحترافية أو المسارح المنزلية أو إدارة كابلات المكاتب حيث تهم الجماليات.",
-    specifications: [
-      "Length: 15cm each",
-      "50 pieces (all black)",
-      "Eco-friendly materials",
-      "Double-sided adhesive",
-      "Washable and reusable",
-      "Professional appearance"
-    ],
-    specificationsAr: [
-      "الطول: 15 سم لكل قطعة",
-      "50 قطعة (كلها سوداء)",
-      "مواد صديقة للبيئة",
-      "لاصق على الوجهين",
-      "قابل للغسل وإعادة الاستخدام",
-      "مظهر احترافي"
-    ]
+    packaging: "Each pack contains 50 pieces",
+    packagingAr: "كل عبوة تحتوي على 50 قطعة",
+    detailedDescription: "Professional-grade black hook loop straps for a clean, uniform look.",
+    detailedDescriptionAr: "أشرطة حلقية سوداء احترافية للحصول على مظهر نظيف وموحد.",
+    specifications: ["Length: 15cm", "50 pieces (all black)"],
+    specificationsAr: ["الطول: 15 سم", "50 قطعة سوداء"]
   },
   {
     id: 4,
@@ -114,28 +74,14 @@ const products = [
     featured: false,
     image: "🌈",
     images: ["🌈"],
-    colors: "Black, White, Matcha Green, Blue, Gray Blue",
-    colorsAr: "أسود، أبيض، أخضر ماتشا، أزرق، رمادي مزرق",
-    packaging: "Each pack contains (3 Black, 3 White, 3 Green, 3 Ice Blue, 3 Gray Blue)",
-    packagingAr: "كل عبوة تحتوي على (3 أسود، 3 أبيض، 3 أخضر، 3 أزرق فاتح، 3 رمادي مزرق)",
-    detailedDescription: "Flexible silicon cable straps in beautiful modern colors. Soft-touch material won't damage cables while providing secure hold. Perfect for organizing charging cables, headphone wires, or bundling cords behind desks and entertainment centers. Durable silicon material is heat-resistant and long-lasting.",
-    detailedDescriptionAr: "أشرطة كابلات سيليكون مرنة بألوان عصرية جميلة. مادة ناعمة الملمس لن تضر بالكابلات مع توفير ثبات آمن. مثالية لتنظيم كابلات الشحن أو أسلاك سماعات الرأس أو ربط الأسلاك خلف المكاتب ومراكز الترفيه. مادة السيليكون المتينة مقاومة للحرارة وطويلة الأمد.",
-    specifications: [
-      "15 pieces total",
-      "Premium silicon material",
-      "Heat-resistant",
-      "Soft-touch design",
-      "Won't damage cables",
-      "Colors: Black, White, Matcha Green, Ice Blue, Gray Blue"
-    ],
-    specificationsAr: [
-      "15 قطعة إجمالي",
-      "مادة سيليكون فاخرة",
-      "مقاوم للحرارة",
-      "تصميم ناعم الملمس",
-      "لن يضر بالكابلات",
-      "الألوان: أسود، أبيض، أخضر ماتشا، أزرق فاتح، رمادي مزرق"
-    ]
+    colors: "Black, White, Green, Blue, Gray",
+    colorsAr: "أسود، أبيض، أخضر، أزرق، رمادي",
+    packaging: "Each pack contains 15 pieces",
+    packagingAr: "كل عبوة تحتوي على 15 قطعة",
+    detailedDescription: "Flexible silicon cable straps in beautiful modern colors.",
+    detailedDescriptionAr: "أشرطة كابلات سيليكون مرنة بألوان عصرية جميلة.",
+    specifications: ["15 pieces total", "Premium silicon material"],
+    specificationsAr: ["15 قطعة إجمالي", "مادة سيليكون فاخرة"]
   },
   {
     id: 5,
@@ -151,47 +97,33 @@ const products = [
     images: ["⬛"],
     colors: "Black",
     colorsAr: "أسود",
-    packaging: "Each pack contains (15 Black)",
-    packagingAr: "كل عبوة تحتوي على (15 أسود)",
-    detailedDescription: "Premium black silicon cable straps for a professional, minimalist aesthetic. Perfect for high-end installations where cable management needs to be invisible yet effective. Flexible silicon material provides secure hold without scratching or damaging expensive cables. Ideal for professional workstations, studios, or premium home setups.",
-    detailedDescriptionAr: "أشرطة كابلات سيليكون سوداء فاخرة لجمالية احترافية وبسيطة. مثالية للتركيبات الراقية حيث تحتاج إدارة الكابلات إلى أن تكون غير مرئية لكنها فعالة. توفر مادة السيليكون المرنة ثباتاً آمناً دون خدش أو إتلاف الكابلات باهظة الثمن. مثالية لمحطات العمل الاحترافية أو الاستوديوهات أو الإعدادات المنزلية المتميزة.",
-    specifications: [
-      "15 pieces (all black)",
-      "Premium silicon material",
-      "Heat-resistant",
-      "Professional appearance",
-      "Won't damage cables",
-      "Flexible and durable"
-    ],
-    specificationsAr: [
-      "15 قطعة (كلها سوداء)",
-      "مادة سيليكون فاخرة",
-      "مقاوم للحرارة",
-      "مظهر احترافي",
-      "لن يضر بالكابلات",
-      "مرن ومتين"
-    ]
+    packaging: "Each pack contains 15 pieces",
+    packagingAr: "كل عبوة تحتوي على 15 قطعة",
+    detailedDescription: "Premium black silicon cable straps for a minimalist aesthetic.",
+    detailedDescriptionAr: "أشرطة كابلات سيليكون سوداء فاخرة لجمالية بسيطة.",
+    specifications: ["15 pieces (all black)", "Premium silicon"],
+    specificationsAr: ["15 قطعة سوداء", "سيليكون فاخر"]
   },
   {
     id: 6,
-    name: "Desk Organizer",
-    nameAr: "منظم مكتب",
-    slug: "desk-organizer",
-    description: "Multi-compartment desk caddy",
-    descriptionAr: "منظم مكتب متعدد الأقسام",
-    price: 85,
-    category: "Workspace",
+    name: "AuraFlex Smart LED Neon Strip",
+    nameAr: "شريط نيون LED ذكي (أورا فليكس)",
+    slug: "auraflex-smart-led-neon-strip",
+    description: "Vibrant, flexible neon lighting for home and office",
+    descriptionAr: "إضاءة نيون مرنة ونابضة بالحياة للمنزل والمكتب",
+    price: 95,
+    category: "LED Lights",
     featured: true,
-    image: "📝",
-    images: ["📝"],
-    colors: "White, Black",
-    colorsAr: "أبيض، أسود",
-    packaging: "Single unit",
-    packagingAr: "وحدة واحدة",
-    detailedDescription: "Multi-compartment desk organizer to keep your workspace tidy and efficient.",
-    detailedDescriptionAr: "منظم مكتب متعدد الأقسام للحفاظ على مساحة عملك مرتبة وفعالة.",
-    specifications: ["Multiple compartments", "Durable material"],
-    specificationsAr: ["أقسام متعددة", "مادة متينة"]
+    image: "✨",
+    images: ["✨", "✨"],
+    colors: "RGB Multi-color",
+    colorsAr: "ألوان RGB متعددة",
+    packaging: "1x 5M LED Strip, 1x Remote, 1x Power Adapter",
+    packagingAr: "1x شريط 5 متر، 1x جهاز تحكم، 1x محول طاقة",
+    detailedDescription: "Transform your space with the AuraFlex Smart LED Neon Strip. Featuring smooth, dot-free illumination and flexible design, it's perfect for gaming setups, home theaters, or accent lighting.",
+    detailedDescriptionAr: "حول مساحتك مع شريط نيون LED ذكي أورا فليكس. يتميز بإضاءة ناعمة وخالية من النقاط وتصميم مرن، مثالي لإعدادات الألعاب أو المسارح المنزلية أو الإضاءة التجميلية.",
+    specifications: ["5 Meters length", "App & Remote control", "Waterproof IP65"],
+    specificationsAr: ["طول 5 أمتار", "تحكم عبر التطبيق والريموت", "مقاوم للماء IP65"]
   },
   {
     id: 7,
@@ -282,7 +214,8 @@ const products = [
 const categoryTranslations = {
   "All Products": "جميع المنتجات",
   "Workspace": "مساحة العمل",
-  "Phone Accessories": "إكسسوارات الهاتف",
   "Home": "المنزل",
-  "Car Accessories": "إكسسوارات السيارة"
+  "Phone Accessories": "إكسسوارات الهاتف",
+  "Car Accessories": "إكسسوارات السيارة",
+  "LED Lights": "إضاءة LED"
 };
