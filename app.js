@@ -169,14 +169,14 @@ function updateCart() {
         <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
             <div style="flex:1;">
                 <strong style="font-size:0.9rem; color:#2c4a5c;">${i.name}</strong><br>
-                <span style="color:#888; font-size:0.8rem;">${i.price} AED Ã— ${i.quantity}</span><br>
+                <span style="color:#888; font-size:0.8rem;">${i.price} AED x ${i.quantity}</span><br>
                 <span style="color:#e07856; font-weight:600; font-size:0.9rem;">${(i.price * i.quantity).toFixed(2)} AED</span>
             </div>
             <div style="display:flex; gap:0.4rem; align-items:center;">
                 <button onclick="updateQuantity(${i.id}, -1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">-</button>
                 <span style="font-size:0.9rem; font-weight:600; min-width:20px; text-align:center;">${i.quantity}</span>
                 <button onclick="updateQuantity(${i.id}, 1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">+</button>
-                <button onclick="removeFromCart(${i.id})" style="padding:0.3rem 0.6rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.3rem; font-size:0.85rem;">âœ•</button>
+                <button onclick="removeFromCart(${i.id})" style="padding:0.3rem 0.6rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.3rem; font-size:0.85rem;">X</button>
             </div>
         </div>
     `).join(""); 
@@ -202,7 +202,7 @@ function updateCart() {
         
         if (recommendedProducts.length > 0) {
             footerHTML += `
-                <div style="padding: 0.5rem 0.75rem; background: #fef5f2; border: 1px solid #e07856; border-radius: 6px; margin-bottom: 0.5rem;">
+                <div style="padding: 0.5rem 0.75rem; background: #ffffff; border: 1px solid #e07856; border-radius: 6px; margin-bottom: 0.5rem;">
                     <div style="font-weight: 600; color: #e07856; font-size: 0.75rem; margin-bottom: 0.4rem;">
                         +${amountNeeded.toFixed(0)} AED for FREE delivery / توصيل مجاني
                     </div>
@@ -213,7 +213,7 @@ function updateCart() {
                             <span style="font-size: 0.75rem; color: #2c4a5c; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 0.5rem;">${p.name}</span>
                             <span style="font-size: 0.7rem; color: #666; margin-right: 0.5rem;">${p.price}</span>
                             <button onclick="addToCart(${p.id}, event)" style="padding: 0.2rem 0.5rem; background: ${reachesThreshold ? '#e07856' : '#2c4a5c'}; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 0.7rem;">
-                                ${reachesThreshold ? '✓' : '+'}
+                                ${reachesThreshold ? '+' : '+'}
                             </button>
                         </div>
                     `}).join('')}
@@ -250,7 +250,7 @@ function updateCart() {
                 onclick="checkout()" 
                 onmouseover="this.style.background='#0052CC'" 
                 onmouseout="this.style.background='#0066FF'">
-                ðŸ’³ Pay with Card / Ø§Ù„Ø¯ÙØ¹ Ø¨Ø§Ù„Ø¨Ø·Ø§Ù‚Ø©
+                Pay with Card / الدفع بالبطاقة
             </button>
         </div>
     `;
