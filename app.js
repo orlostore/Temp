@@ -199,14 +199,10 @@ function updateCart() {
                         Add these items to unlock free delivery:
                     </div>
                     ${recommendedProducts.map(p => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">
-                            <div style="flex: 1;">
-                                <div style="font-weight: 500; color: #2c4a5c; font-size: 0.85rem;">${p.name}</div>
-                                <div style="font-size: 0.75rem; color: #888;">${p.price} AED</div>
-                            </div>
-                            <button onclick="addToCart(${p.id}, event)" style="padding: 0.4rem 0.8rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; white-space: nowrap;">
-                                Add
-                            </button>
+                        <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
+                            <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
+                            <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${p.price}</div>
+                            <button onclick="addToCart(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
                         </div>
                     `).join('')}
                 </div>
