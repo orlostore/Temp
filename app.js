@@ -61,11 +61,10 @@ function renderProducts(list) {
                 <div class="product-image">${p.image}</div>
             </a>
             <div class="product-info">
-                <small>${p.category}</small>
                 <a href="product.html?product=${p.slug}" style="text-decoration:none; color:inherit;">
-                    <h3 class="product-title">${p.name}${p.nameAr ? `<br><span class="arabic-text" style="font-size:0.9rem;">${p.nameAr}</span>` : ''}</h3>
+                    <h3 class="product-title">${p.name}</h3>
+                    ${p.nameAr ? `<p class="product-title-ar">${p.nameAr}</p>` : ''}
                 </a>
-                <p>${p.description}${p.descriptionAr ? `<br><span class="arabic-text" style="font-size:0.72rem;">${p.descriptionAr}</span>` : ''}</p>
                 <div class="product-price">${p.price} AED</div>
                 <button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart</button>
             </div>
@@ -124,17 +123,33 @@ function addToCart(id, event) {
     } 
     saveCart(); 
     updateCart(); 
-    showNotification(`${product.name} added to cart!`, event); 
+    
+    // Button turns green with "✓ Added!"
+    if (event && event.target) {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        const originalBg = btn.style.background;
+        
+        btn.textContent = "✓ Added!";
+        btn.style.background = "#28a745";
+        
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.background = originalBg || "";
+        }, 2000);
+    }
 }
 
 function updateCart() { 
     const cartItems = document.getElementById("cartItems"); 
     const cartCount = document.getElementById("cartCount"); 
+    const bottomCartCount = document.getElementById("bottomCartCount");
     const cartFooter = document.querySelector(".cart-footer"); 
     
     if (!cart.length) { 
         cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>"; 
-        cartCount.textContent = 0; 
+        if (cartCount) cartCount.textContent = 0;
+        if (bottomCartCount) bottomCartCount.textContent = 0;
         cartFooter.innerHTML = `<div class="cart-total"><span>Total / الإجمالي:</span><span>0.00 AED</span></div>`; 
         return; 
     } 
@@ -145,7 +160,8 @@ function updateCart() {
     const total = subtotal + deliveryFee; 
     const amountNeeded = Math.max(0, 100 - subtotal);
     
-    cartCount.textContent = totalItems; 
+    if (cartCount) cartCount.textContent = totalItems;
+    if (bottomCartCount) bottomCartCount.textContent = totalItems; 
     
     // Cart items display (top section - already in cartItems div)
     cartItems.innerHTML = cart.map(i => `
@@ -217,11 +233,15 @@ function updateCart() {
         </div>
     `;
     
-    // 3. CHECKOUT BUTTON (always shown)
+   // 3. CHECKOUT BUTTON (Updated to connect to Stripe)
     footerHTML += `
         <div style="padding: 0 1rem 1rem;">
-            <button style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" onclick="alert('Stripe payment coming soon! / الدفع عبر سترايب قريباً!')" onmouseover="this.style.background='#0052CC'" onmouseout="this.style.background='#0066FF'">
-                💳 Pay with Card / الدفع بالبطاقة (Coming Soon)
+            <button id="stripeBtn" 
+                style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" 
+                onclick="checkout()" 
+                onmouseover="this.style.background='#0052CC'" 
+                onmouseout="this.style.background='#0066FF'">
+                💳 Pay with Card / الدفع بالبطاقة
             </button>
         </div>
     `;
@@ -258,33 +278,6 @@ function toggleCart() {
     document.getElementById("cartSidebar").classList.toggle("active"); 
 }
 
-function checkout() { 
-    if (!cart.length) { 
-        alert("Your cart is empty!"); 
-        return; 
-    } 
-    
-    const orderNumber = generateOrderNumber(); 
-    const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0); 
-    const deliveryFee = calculateDeliveryFee(subtotal); 
-    const total = subtotal + deliveryFee; 
-    const zone = deliveryZones[selectedDeliveryZone]; 
-    
-    let message = `Hello ORLO, I'd like to order:%0A%0A*Order #${orderNumber}*%0A%0A`; 
-    cart.forEach(i => { 
-        message += `• ${i.name} × ${i.quantity} = ${(i.price * i.quantity).toFixed(2)} AED%0A`; 
-    }); 
-    message += `%0A─────────────────%0A`; 
-    message += `Subtotal: ${subtotal.toFixed(2)} AED%0A`; 
-    message += `Delivery (${zone.name}): ${deliveryFee === 0 ? 'FREE' : deliveryFee.toFixed(2) + ' AED'}%0A`; 
-    message += `%0A*Total: ${total.toFixed(2)} AED*`; 
-    message += `%0A%0ADelivery Location: ${zone.name}`; 
-    message += `%0AEstimated Delivery: ${DELIVERY_TIME}`; 
-    message += `%0A%0APlease confirm my delivery address and payment method.`; 
-    
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank"); 
-}
-
 function openPolicy(type) { 
     document.getElementById("policyText").innerHTML = policies[type]; 
     document.getElementById("policyModal").style.display = "block"; 
@@ -296,76 +289,6 @@ function closePolicy() {
     document.body.style.overflow = "auto"; 
 }
 
-function showNotification(message, clickEvent) {
-    const notification = document.createElement('div');
-    
-    let topPos = '100px';
-    let leftPos = '50%';
-    let transform = 'translateX(-50%)';
-    
-    // If we have the click event, find the product card and center notification over it
-    if (clickEvent && clickEvent.target) {
-        const button = clickEvent.target;
-        // Find the parent product card
-        const productCard = button.closest('.product-card');
-        
-        if (productCard) {
-            const cardRect = productCard.getBoundingClientRect();
-            // Position notification centered both horizontally AND vertically over the card
-            topPos = (cardRect.top + window.scrollY + (cardRect.height / 2) - 20) + 'px'; // Center vertically (minus half notification height)
-            leftPos = (cardRect.left + cardRect.width / 2) + 'px';
-            transform = 'translateX(-50%)'; // Center horizontally
-        } else {
-            // Fallback if product card not found
-            const rect = button.getBoundingClientRect();
-            topPos = (rect.top + window.scrollY - 20) + 'px';
-            leftPos = (rect.left + rect.width / 2) + 'px';
-            transform = 'translateX(-50%)';
-        }
-    }
-    
-    notification.style.cssText = `
-        position: absolute;
-        top: ${topPos};
-        left: ${leftPos};
-        transform: ${transform};
-        background: #e07856;
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        z-index: 10000;
-        font-weight: 600;
-        font-size: 0.95rem;
-        animation: slideIn 0.3s ease-out;
-        white-space: nowrap;
-    `;
-    
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: ${transform} translateY(-10px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: ${transform} translateY(0) scale(1);
-            }
-        }
-    `;
-    document.head.appendChild(style);
-    
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        notification.style.transition = 'opacity 0.4s';
-        setTimeout(() => notification.remove(), 400);
-    }, 2000);
-}
-
 function toggleAbout() {
     const aboutSection = document.getElementById('about');
     const isVisible = aboutSection.style.display !== 'none';
@@ -375,6 +298,40 @@ function toggleAbout() {
     } else {
         aboutSection.style.display = 'block';
         aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function toggleMobileMenu() {
+    let overlay = document.querySelector('.mobile-menu-overlay');
+    
+    if (!overlay) {
+        // Create menu overlay
+        overlay = document.createElement('div');
+        overlay.className = 'mobile-menu-overlay';
+        overlay.innerHTML = `
+            <div class="mobile-menu">
+                <a href="#products" onclick="closeMobileMenu()">🛍️ Shop / تسوق</a>
+                <a href="javascript:void(0);" onclick="toggleAbout(); closeMobileMenu();">ℹ️ About / من نحن</a>
+                <a href="#contact" onclick="closeMobileMenu()">📧 Contact / اتصل بنا</a>
+                <a href="#terms" onclick="closeMobileMenu()">📋 Terms / الشروط</a>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                closeMobileMenu();
+            }
+        };
+    }
+    
+    overlay.classList.toggle('active');
+}
+
+function closeMobileMenu() {
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
     }
 }
 
@@ -413,5 +370,55 @@ window.onload = () => {
         if (e.target.id === "policyModal") { 
             closePolicy(); 
         } 
-    }; 
+    };
+    
+    // Mobile bottom nav handlers
+    const bottomCartBtn = document.getElementById("bottomCartBtn");
+    const bottomMenuBtn = document.getElementById("bottomMenuBtn");
+    
+    if (bottomCartBtn) {
+        bottomCartBtn.onclick = toggleCart;
+    }
+    
+    if (bottomMenuBtn) {
+        bottomMenuBtn.onclick = toggleMobileMenu;
+    }
 };
+
+// --- STRIPE PAYMENT ADD-ON ---
+async function checkout() {
+    const btn = document.getElementById("stripeBtn");
+    const originalText = btn ? btn.innerHTML : "Pay with Card";
+    
+    try {
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = "Connecting...";
+        }
+
+        const response = await fetch('https://temp-5lr.pages.dev/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                cart: cart,
+                deliveryZoneKey: selectedDeliveryZone
+            }),
+        });
+
+        const data = await response.json();
+
+        if (data.url) {
+            window.location.href = data.url; 
+        } else {
+            throw new Error('No URL');
+        }
+
+    } catch (err) {
+        console.error("Payment Error:", err);
+        alert("Payment system is syncing. Please try again.");
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    }
+}
