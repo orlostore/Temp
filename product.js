@@ -142,7 +142,18 @@ async function initProductPage() {
       cartCount.textContent = totalItems;
     }
     
-    alert(`${product.name} added to cart!`);
+    // Button turns green with "✓ Added!"
+    const btn = document.getElementById("addToCartBtn");
+    const originalText = btn.textContent;
+    const originalBg = btn.style.background;
+    
+    btn.textContent = "✓ Added!";
+    btn.style.background = "#28a745";
+    
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.style.background = originalBg || "";
+    }, 2000);
   };
 
   // Setup lightbox for images
