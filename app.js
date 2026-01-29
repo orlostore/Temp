@@ -202,9 +202,9 @@ function updateCart() {
         
         if (recommendedProducts.length > 0) {
             footerHTML += `
-                <div style="padding: 0.5rem 0.75rem; background: #f0f7f0; border: 1px solid #28a745; border-radius: 6px; margin-bottom: 0.5rem;">
-                    <div style="font-weight: 600; color: #28a745; font-size: 0.75rem; margin-bottom: 0.4rem;">
-                        +${amountNeeded.toFixed(0)} AED for FREE delivery:
+                <div style="padding: 0.5rem 0.75rem; background: #fef5f2; border: 1px solid #e07856; border-radius: 6px; margin-bottom: 0.5rem;">
+                    <div style="font-weight: 600; color: #e07856; font-size: 0.75rem; margin-bottom: 0.4rem;">
+                        +${amountNeeded.toFixed(0)} AED for FREE delivery / توصيل مجاني
                     </div>
                     ${recommendedProducts.map(p => {
                         const reachesThreshold = subtotal + p.price >= 100;
@@ -212,8 +212,8 @@ function updateCart() {
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.3rem 0;">
                             <span style="font-size: 0.75rem; color: #2c4a5c; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 0.5rem;">${p.name}</span>
                             <span style="font-size: 0.7rem; color: #666; margin-right: 0.5rem;">${p.price}</span>
-                            <button onclick="addToCart(${p.id}, event)" style="padding: 0.2rem 0.5rem; background: ${reachesThreshold ? '#28a745' : '#2c4a5c'}; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 0.7rem;">
-                                ${reachesThreshold ? '✓ Add' : '+'}
+                            <button onclick="addToCart(${p.id}, event)" style="padding: 0.2rem 0.5rem; background: ${reachesThreshold ? '#e07856' : '#2c4a5c'}; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 0.7rem;">
+                                ${reachesThreshold ? '✓' : '+'}
                             </button>
                         </div>
                     `}).join('')}
@@ -222,20 +222,21 @@ function updateCart() {
         }
     }
     
+    
     // 2. SUMMARY SECTION (always shown)
     footerHTML += `
         <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.75rem;">
             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9rem; color: #2c4a5c;">
-                <span>Subtotal / Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹ Ø§Ù„ÙØ±Ø¹ÙŠ:</span>
+                <span>Subtotal / المجموع الفرعي:</span>
                 <span>${subtotal.toFixed(2)} AED</span>
             </div>
             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9rem; color: #2c4a5c;">
-                <span>Delivery / Ø§Ù„ØªÙˆØµÙŠÙ„:</span>
-                <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE / Ù…Ø¬Ø§Ù†ÙŠ' : deliveryFee.toFixed(2) + ' AED'}</span>
+                <span>Delivery / التوصيل:</span>
+                <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE / مجاني' : deliveryFee.toFixed(2) + ' AED'}</span>
             </div>
             <div style="border-top: 2px solid #ddd; margin: 0.5rem 0;"></div>
             <div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;">
-                <span>Total / Ø§Ù„Ø¥Ø¬Ù…Ø§Ù„ÙŠ:</span>
+                <span>Total / الإجمالي:</span>
                 <span>${total.toFixed(2)} AED</span>
             </div>
         </div>
