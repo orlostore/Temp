@@ -184,42 +184,48 @@ function updateCart() {
     // Build cart footer: UPSELL FIRST, then SUMMARY, then BUTTON
     let footerHTML = '';
     
-    // 1. UPSELL SECTION (only if under 100 AED) - Compact & Smart
+    // 1. UPSELL SECTION (only if under 100 AED) - Simple, no chasing
     if (subtotal < 100) {
         const cartProductIds = cart.map(i => i.id);
-        const availableProducts = products.filter(p => !cartProductIds.includes(p.id));
         
-        // Smart sorting: prioritize items that reach threshold in 1 add
-        const canReachThreshold = availableProducts.filter(p => subtotal + p.price >= 100);
-        const cannotReach = availableProducts.filter(p => subtotal + p.price < 100);
+        // Get initial 2 products that can help reach threshold (stored on first cart add)
+        if (!window.initialUpsellProducts) {
+            const availableProducts = products
+                .filter(p => !cartProductIds.includes(p.id))
+                .filter(p => p.price >= 20) // Only meaningful products
+                .sort((a, b) => b.price - a.price) // Highest price first
+                .slice(0, 2);
+            window.initialUpsellProducts = availableProducts.map(p => p.id);
+        }
         
-        // Sort each group by price (ascending for better value)
-        canReachThreshold.sort((a, b) => a.price - b.price);
-        cannotReach.sort((a, b) => b.price - a.price); // Higher price = closer to threshold
-        
-        // Combine: threshold-reachers first, then best others
-        const recommendedProducts = [...canReachThreshold, ...cannotReach].slice(0, 2);
+        // Show only the initial products (minus any already in cart)
+        const recommendedProducts = window.initialUpsellProducts
+            .map(id => products.find(p => p.id === id))
+            .filter(p => p && !cartProductIds.includes(p.id));
         
         if (recommendedProducts.length > 0) {
             footerHTML += `
-                <div style="padding: 0.5rem 0.75rem; background: #ffffff; border: 1px solid #e07856; border-radius: 6px; margin-bottom: 0.5rem;">
-                    <div style="font-weight: 600; color: #e07856; font-size: 0.75rem; margin-bottom: 0.4rem;">
+                <div style="padding: 0.75rem 1rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.75rem;">
+                    <div style="font-weight: 600; margin-bottom: 0.5rem; color: #2c4a5c; font-size: 0.85rem;">
                         +${amountNeeded.toFixed(0)} AED for FREE delivery / توصيل مجاني
                     </div>
-                    ${recommendedProducts.map(p => {
-                        const reachesThreshold = subtotal + p.price >= 100;
-                        return `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.3rem 0;">
-                            <span style="font-size: 0.75rem; color: #2c4a5c; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 0.5rem;">${p.name}</span>
-                            <span style="font-size: 0.7rem; color: #666; margin-right: 0.5rem;">${p.price}</span>
-                            <button onclick="addToCart(${p.id}, event)" style="padding: 0.2rem 0.5rem; background: ${reachesThreshold ? '#e07856' : '#2c4a5c'}; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 0.7rem;">
-                                ${reachesThreshold ? '+' : '+'}
+                    ${recommendedProducts.map(p => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid #f0f0f0;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
+                                <div style="font-size: 0.7rem; color: #888;">${p.price} AED</div>
+                            </div>
+                            <button onclick="addToCart(${p.id}, event)" style="padding: 0.3rem 0.6rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">
+                                Add
                             </button>
                         </div>
-                    `}).join('')}
+                    `).join('')}
                 </div>
             `;
         }
+    } else {
+        // Reset when threshold reached (for next session)
+        window.initialUpsellProducts = null;
     }
     
     
