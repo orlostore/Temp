@@ -1,5 +1,8 @@
 const WHATSAPP_NUMBER = "971XXXXXXXXX";
 
+// === FREE DELIVERY THRESHOLD - Change this value to adjust ===
+const FREE_DELIVERY_THRESHOLD = 100;
+
 const deliveryZones = {
     dubai: {
         name: "Dubai",
@@ -162,7 +165,7 @@ function updateCart() {
     const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0); 
     const deliveryFee = calculateDeliveryFee(subtotal); 
     const total = subtotal + deliveryFee; 
-    const amountNeeded = Math.max(0, 100 - subtotal);
+    const amountNeeded = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
     
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems; 
@@ -201,30 +204,33 @@ function updateCart() {
     
     let footerHTML = '';
     
-    // UPSELL SECTION - two tiers based on how close to free delivery
-    const showUpsell = subtotal < 100 && !(isMobile && upsellUsed);
+    // UPSELL SECTION
+    // Option 1: subtotal >= 60 → show 2 items directly
+    // Option 2: subtotal < 60 → show message + dropdown
+    const amountNeededForFree = FREE_DELIVERY_THRESHOLD - subtotal;
+    const showUpsell = subtotal < FREE_DELIVERY_THRESHOLD && !(isMobile && upsellUsed);
+    
     if (showUpsell) {
         const cartProductIds = cart.map(i => i.id);
         
-        // Get upsell products (saved for consistency)
-        // Item price must be >= amountNeeded so subtotal + item >= 100
+        // Get upsell products: each item price >= amountNeededForFree
         if (!savedUpsellProducts) {
             savedUpsellProducts = products
                 .filter(p => !cartProductIds.includes(p.id))
-                .filter(p => p.price >= amountNeeded)
+                .filter(p => p.price >= amountNeededForFree)
                 .sort((a, b) => a.price - b.price)
-                .slice(0, 3);
+                .slice(0, 2);
         }
         
         const availableUpsell = savedUpsellProducts.filter(p => !cartProductIds.includes(p.id));
         
         if (subtotal >= 60) {
-            // TIER 1: Close to threshold (60-99 AED) - show items directly
+            // OPTION 1: Close to threshold (60-99 AED) - show 2 items directly
             if (availableUpsell.length > 0) {
                 footerHTML += `
                     <div style="padding: 0.75rem 1rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.75rem;">
                         <div style="font-weight: 600; margin-bottom: 0.75rem; color: #2c4a5c; font-size: 0.9rem;">
-                            Add ${amountNeeded.toFixed(0)} AED more for free delivery:
+                            Add ${amountNeededForFree.toFixed(0)} AED more for free delivery:
                         </div>
                         ${availableUpsell.map(p => `
                             <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
@@ -237,11 +243,11 @@ function updateCart() {
                 `;
             }
         } else {
-            // TIER 2: Far from threshold (below 60 AED) - show message with collapsible dropdown
+            // OPTION 2: Far from threshold (below 60 AED) - show message + dropdown
             footerHTML += `
                 <div style="padding: 0.75rem 1rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.75rem;">
                     <div style="font-weight: 600; color: #2c4a5c; font-size: 0.9rem; margin-bottom: 0.5rem;">
-                        🚚 Add ${amountNeeded.toFixed(0)} AED more to qualify for free delivery
+                        🚚 Add ${amountNeededForFree.toFixed(0)} AED more to qualify for free delivery
                     </div>
                     ${availableUpsell.length > 0 ? `
                         <div style="cursor: pointer;" onclick="this.querySelector('.upsell-dropdown').style.display = this.querySelector('.upsell-dropdown').style.display === 'none' ? 'block' : 'none'; this.querySelector('.arrow').textContent = this.querySelector('.upsell-dropdown').style.display === 'none' ? '▶' : '▼';">
@@ -263,7 +269,7 @@ function updateCart() {
     }
     
     // Reset saved upsell if threshold reached
-    if (subtotal >= 100) {
+    if (subtotal >= FREE_DELIVERY_THRESHOLD) {
         savedUpsellProducts = null;
     }
     
