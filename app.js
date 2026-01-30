@@ -53,6 +53,13 @@ function calculateDeliveryFee(subtotal) { const zone = deliveryZones[selectedDel
 function getAmountUntilFreeDelivery(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.freeThreshold - subtotal; }
 function generateOrderNumber() { const date = new Date(); const year = date.getFullYear().toString().slice(-2); const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); const random = Math.floor(Math.random() * 9000) + 1000; return `ORLO-${year}${month}${day}-${random}`; }
 
+// Get Arabic translation for category from products
+function getCategoryArabic(category) {
+    if (category === "All Products") return "جميع المنتجات";
+    const product = products.find(p => p.category === category);
+    return product && product.categoryAr ? product.categoryAr : '';
+}
+
 function renderProducts(list) { 
     const grid = document.getElementById("productsGrid"); 
     if (!list.length) { 
@@ -91,7 +98,10 @@ function loadProducts(category = "All Products") {
 
 function createCategoryFilters() { 
     const container = document.getElementById("categoryFilters"); 
-    container.innerHTML = getCategories().map(cat => `<button class="category-btn ${cat === selectedCategory ? "active" : ""}" onclick="loadProducts('${cat}')">${cat}<br><span class="arabic-text category-arabic">${categoryTranslations[cat]}</span></button>`).join(""); 
+    container.innerHTML = getCategories().map(cat => {
+        const catAr = getCategoryArabic(cat);
+        return `<button class="category-btn ${cat === selectedCategory ? "active" : ""}" onclick="loadProducts('${cat}')">${cat}${catAr ? `<br><span class="arabic-text category-arabic">${catAr}</span>` : ''}</button>`;
+    }).join(""); 
 }
 
 function updateCategoryButtons() { 
