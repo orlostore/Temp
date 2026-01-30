@@ -9,16 +9,6 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 // Products array - will be populated from cache or Google Sheets
 let products = [];
 
-// Category translations
-const categoryTranslations = {
-  "All Products": "جميع المنتجات",
-  "Workspace": "مساحة العمل",
-  "Home": "المنزل",
-  "Phone Accessories": "إكسسوارات الهاتف",
-  "Car Accessories": "إكسسوارات السيارة",
-  "LED Lights": "إضاءة LED"
-};
-
 // Parse CSV to array of objects
 function parseCSV(csv) {
   const lines = csv.split('\n');
@@ -84,6 +74,7 @@ function rowToProduct(row, index) {
     detailedDescriptionAr: row.descriptionAr || '',
     price: parseFloat(row.price) || 0,
     category: row.category || 'Workspace',
+    categoryAr: row.categoryAr || row.categoryAR || '',
     featured: row.featured === '1' || row.featured === 'true' || row.featured === 'TRUE',
     image: images[0],
     images: images,
