@@ -193,13 +193,28 @@ window.changeMainImage = function(imgSrc, index) {
   });
 };
 
-// Initialize cart count on page load
+// Initialize cart count and cart icon click on page load
 window.addEventListener('DOMContentLoaded', () => {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const cartCount = document.getElementById("cartCount");
   if (cartCount) {
     const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
     cartCount.textContent = totalItems;
+  }
+  
+  // Setup cart icon click
+  const cartIcon = document.getElementById("cartIcon");
+  const closeCart = document.getElementById("closeCart");
+  if (cartIcon) {
+    cartIcon.onclick = () => {
+      document.getElementById("cartSidebar").classList.toggle("active");
+      if (typeof updateCart === 'function') updateCart();
+    };
+  }
+  if (closeCart) {
+    closeCart.onclick = () => {
+      document.getElementById("cartSidebar").classList.remove("active");
+    };
   }
 });
 
