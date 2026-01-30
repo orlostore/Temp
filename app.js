@@ -420,6 +420,7 @@ window.onload = () => {
     
     if (bottomHomeBtn) {
         bottomHomeBtn.onclick = function() {
+            console.log("Home clicked");
             // Close cart if open
             const cartSidebar = document.getElementById("cartSidebar");
             if (cartSidebar.classList.contains("active")) {
