@@ -1480,7 +1480,8 @@ footer p {
   }
   
   /* Orange indicator on bottom nav for active cart */
-  .bottom-nav-item.cart-active::after {
+  .bottom-nav-item.cart-active::after,
+  .bottom-nav-item.home-active::after {
     content: '';
     position: absolute;
     bottom: 0;
