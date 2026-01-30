@@ -201,13 +201,12 @@ function updateCart() {
     
     let footerHTML = '';
     
-    // UPSELL SECTION - uses savedUpsellProducts to show same A,B,C consistently
+    // UPSELL SECTION - two tiers based on how close to free delivery
     const showUpsell = subtotal < 100 && !(isMobile && upsellUsed);
     if (showUpsell) {
         const cartProductIds = cart.map(i => i.id);
         
-        // First time: save the 3 upsell products, reuse same ones after
-        // Show items where subtotal + item price >= 100 (adding it reaches free delivery)
+        // Get upsell products (saved for consistency)
         if (!savedUpsellProducts) {
             savedUpsellProducts = products
                 .filter(p => !cartProductIds.includes(p.id))
@@ -216,22 +215,47 @@ function updateCart() {
                 .slice(0, 3);
         }
         
-        // Filter out items already in cart from saved list
         const availableUpsell = savedUpsellProducts.filter(p => !cartProductIds.includes(p.id));
         
-        if (availableUpsell.length > 0) {
+        if (subtotal >= 60) {
+            // TIER 1: Close to threshold (60-99 AED) - show items directly
+            if (availableUpsell.length > 0) {
+                footerHTML += `
+                    <div style="padding: 0.75rem 1rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.75rem;">
+                        <div style="font-weight: 600; margin-bottom: 0.75rem; color: #2c4a5c; font-size: 0.9rem;">
+                            Add ${amountNeeded.toFixed(0)} AED more for free delivery:
+                        </div>
+                        ${availableUpsell.map(p => `
+                            <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
+                                <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
+                                <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${p.price} AED</div>
+                                <button onclick="addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        } else {
+            // TIER 2: Far from threshold (below 60 AED) - show message with collapsible dropdown
             footerHTML += `
                 <div style="padding: 0.75rem 1rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.75rem;">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; color: #2c4a5c; font-size: 0.9rem;">
-                        Add these items to unlock free delivery:
+                    <div style="font-weight: 600; color: #2c4a5c; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        🚚 Add ${amountNeeded.toFixed(0)} AED more to qualify for free delivery
                     </div>
-                    ${availableUpsell.map(p => `
-                        <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
-                            <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
-                            <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${p.price} AED</div>
-                            <button onclick="addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
-                        </div>
-                    `).join('')}
+                    ${availableUpsell.length > 0 ? `
+                        <details style="cursor: pointer;">
+                            <summary style="font-size: 0.8rem; color: #e07856; font-weight: 500; padding: 0.25rem 0;">View suggestions</summary>
+                            <div style="margin-top: 0.5rem;">
+                                ${availableUpsell.map(p => `
+                                    <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
+                                        <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
+                                        <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${p.price} AED</div>
+                                        <button onclick="addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </details>
+                    ` : ''}
                 </div>
             `;
         }
