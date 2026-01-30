@@ -213,26 +213,22 @@ function updateCart() {
     if (showUpsell) {
         const cartProductIds = cart.map(i => i.id);
         
-        // Get upsell products: each item price >= amountNeededForFree
-        if (!savedUpsellProducts) {
-            savedUpsellProducts = products
-                .filter(p => !cartProductIds.includes(p.id))
-                .filter(p => p.price >= amountNeededForFree)
-                .sort((a, b) => a.price - b.price)
-                .slice(0, 2);
-        }
-        
-        const availableUpsell = savedUpsellProducts.filter(p => !cartProductIds.includes(p.id));
+        // Calculate fresh every time - item price must be >= amountNeededForFree
+        const upsellProducts = products
+            .filter(p => !cartProductIds.includes(p.id))
+            .filter(p => p.price >= amountNeededForFree)
+            .sort((a, b) => a.price - b.price)
+            .slice(0, 2);
         
         if (subtotal >= 60) {
-            // OPTION 1: Close to threshold (60-99 AED) - show 2 items directly
-            if (availableUpsell.length > 0) {
+            // OPTION 1: subtotal 60-99 - show 2 items directly
+            if (upsellProducts.length > 0) {
                 footerHTML += `
                     <div style="padding: 0.75rem 1rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.75rem;">
                         <div style="font-weight: 600; margin-bottom: 0.75rem; color: #2c4a5c; font-size: 0.9rem;">
                             Add ${amountNeededForFree.toFixed(0)} AED more for free delivery:
                         </div>
-                        ${availableUpsell.map(p => `
+                        ${upsellProducts.map(p => `
                             <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
                                 <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
                                 <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${p.price} AED</div>
@@ -243,17 +239,17 @@ function updateCart() {
                 `;
             }
         } else {
-            // OPTION 2: Far from threshold (below 60 AED) - show message + dropdown
+            // OPTION 2: subtotal < 60 - show message + dropdown
             footerHTML += `
                 <div style="padding: 0.75rem 1rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.75rem;">
                     <div style="font-weight: 600; color: #2c4a5c; font-size: 0.9rem; margin-bottom: 0.5rem;">
                         🚚 Add ${amountNeededForFree.toFixed(0)} AED more to qualify for free delivery
                     </div>
-                    ${availableUpsell.length > 0 ? `
+                    ${upsellProducts.length > 0 ? `
                         <div style="cursor: pointer;" onclick="this.querySelector('.upsell-dropdown').style.display = this.querySelector('.upsell-dropdown').style.display === 'none' ? 'block' : 'none'; this.querySelector('.arrow').textContent = this.querySelector('.upsell-dropdown').style.display === 'none' ? '▶' : '▼';">
                             <span style="font-size: 0.8rem; color: #e07856; font-weight: 500;"><span class="arrow">▶</span> View suggestions</span>
                             <div class="upsell-dropdown" style="display: none; margin-top: 0.5rem;">
-                                ${availableUpsell.map(p => `
+                                ${upsellProducts.map(p => `
                                     <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
                                         <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
                                         <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${p.price} AED</div>
