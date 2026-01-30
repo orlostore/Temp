@@ -66,11 +66,18 @@ function renderProducts(list) {
         grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#999;padding:3rem;">No products found</p>`; 
         return; 
     } 
-    grid.innerHTML = list.map(p => `
+    grid.innerHTML = list.map(p => {
+        // Check if image is URL or emoji
+        const isUrl = p.image && p.image.startsWith('http');
+        const imageHTML = isUrl 
+            ? `<img src="${p.image}" alt="${p.name}" style="max-width:100%; max-height:100%; object-fit:contain;">` 
+            : p.image;
+        
+        return `
         <div class="product-card">
             ${p.featured ? `<span class="badge">Best Seller</span>` : ""}
             <a href="product.html?product=${p.slug}" style="text-decoration:none;">
-                <div class="product-image">${p.image}</div>
+                <div class="product-image">${imageHTML}</div>
             </a>
             <div class="product-info">
                 <a href="product.html?product=${p.slug}" style="text-decoration:none; color:inherit;">
@@ -81,7 +88,7 @@ function renderProducts(list) {
                 <button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart</button>
             </div>
         </div>
-    `).join(""); 
+    `}).join(""); 
 }
 
 function loadProducts(category = "All Products") { 
