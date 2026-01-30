@@ -207,10 +207,11 @@ function updateCart() {
         const cartProductIds = cart.map(i => i.id);
         
         // First time: save the 3 upsell products, reuse same ones after
+        // Only show items where price >= amountNeeded (so adding it reaches free delivery)
         if (!savedUpsellProducts) {
             savedUpsellProducts = products
-                .filter(p => p.price <= 100)
-                .sort((a, b) => Math.abs(a.price - amountNeeded) - Math.abs(b.price - amountNeeded))
+                .filter(p => p.price >= amountNeeded && p.price <= 100)
+                .sort((a, b) => a.price - b.price)
                 .slice(0, 3);
         }
         
@@ -290,6 +291,8 @@ function updateQuantity(id, change) {
 
 function removeFromCart(id) { 
     cart = cart.filter(i => i.id !== id); 
+    // Reset upsellUsed so upsell can reappear on mobile
+    upsellUsed = false;
     saveCart(); 
     updateCart(); 
 }
