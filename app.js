@@ -38,6 +38,7 @@ const policies = {
 };
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let upsellUsed = false;
 let selectedCategory = "All Products";
 let selectedDeliveryZone = localStorage.getItem("deliveryZone") || "dubai";
 
@@ -144,13 +145,16 @@ function updateCart() {
     const cartItems = document.getElementById("cartItems"); 
     const cartCount = document.getElementById("cartCount"); 
     const bottomCartCount = document.getElementById("bottomCartCount");
-    const cartFooter = document.querySelector(".cart-footer"); 
+    const cartFooter = document.querySelector(".cart-footer");
+    const cartCheckoutFixed = document.getElementById("cartCheckoutFixed");
+    const isMobile = window.innerWidth <= 768;
     
     if (!cart.length) { 
         cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>"; 
         if (cartCount) cartCount.textContent = 0;
         if (bottomCartCount) bottomCartCount.textContent = 0;
-        cartFooter.innerHTML = `<div class="cart-total"><span>Total / الإجمالي:</span><span>0.00 AED</span></div>`; 
+        cartFooter.innerHTML = `<div class="cart-total"><span>Total / الإجمالي:</span><span>0.00 AED</span></div>`;
+        if (cartCheckoutFixed) cartCheckoutFixed.innerHTML = '';
         return; 
     } 
     
@@ -163,7 +167,25 @@ function updateCart() {
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems; 
     
-    // Cart items display (top section - already in cartItems div)
+    // Checkout button HTML
+    const checkoutBtnHTML = `
+        <button id="stripeBtn" 
+            style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" 
+            onclick="checkout()" 
+            onmouseover="this.style.background='#0052CC'" 
+            onmouseout="this.style.background='#0066FF'">
+            💳 Pay with Card / الدفع بالبطاقة
+        </button>
+    `;
+    
+    // On mobile, put checkout button in fixed header
+    if (isMobile && cartCheckoutFixed) {
+        cartCheckoutFixed.innerHTML = checkoutBtnHTML;
+    } else if (cartCheckoutFixed) {
+        cartCheckoutFixed.innerHTML = '';
+    }
+    
+    // Cart items display
     cartItems.innerHTML = cart.map(i => `
         <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
             <div style="flex:1;">
@@ -180,11 +202,12 @@ function updateCart() {
         </div>
     `).join(""); 
     
-    // Build cart footer: UPSELL FIRST, then SUMMARY, then BUTTON
+    // Build cart footer
     let footerHTML = '';
     
-    // 1. UPSELL SECTION (only if under 100 AED)
-    if (subtotal < 100) {
+    // 1. UPSELL SECTION (only if under 100 AED AND not already used on mobile)
+    const showUpsell = subtotal < 100 && !(isMobile && upsellUsed);
+    if (showUpsell) {
         const cartProductIds = cart.map(i => i.id);
         const recommendedProducts = products
             .filter(p => !cartProductIds.includes(p.id))
@@ -202,7 +225,7 @@ function updateCart() {
                         <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
                             <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
                             <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${p.price} AED</div>
-                            <button onclick="addToCart(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
+                            <button onclick="addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
                         </div>
                     `).join('')}
                 </div>
@@ -229,18 +252,14 @@ function updateCart() {
         </div>
     `;
     
-   // 3. CHECKOUT BUTTON (Updated to connect to Stripe)
-    footerHTML += `
-        <div style="padding: 0 1rem 1rem;">
-            <button id="stripeBtn" 
-                style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" 
-                onclick="checkout()" 
-                onmouseover="this.style.background='#0052CC'" 
-                onmouseout="this.style.background='#0066FF'">
-                💳 Pay with Card / الدفع بالبطاقة
-            </button>
-        </div>
-    `;
+    // 3. CHECKOUT BUTTON (only on desktop - mobile has it fixed at top)
+    if (!isMobile) {
+        footerHTML += `
+            <div style="padding: 0 1rem 1rem;">
+                ${checkoutBtnHTML}
+            </div>
+        `;
+    }
     
     cartFooter.innerHTML = footerHTML;
 }
@@ -271,7 +290,33 @@ function removeFromCart(id) {
 }
 
 function toggleCart() { 
-    document.getElementById("cartSidebar").classList.toggle("active"); 
+    const cartSidebar = document.getElementById("cartSidebar");
+    const bottomCartBtn = document.getElementById("bottomCartBtn");
+    
+    cartSidebar.classList.toggle("active");
+    
+    // Toggle orange indicator on mobile bottom nav
+    if (bottomCartBtn) {
+        if (cartSidebar.classList.contains("active")) {
+            bottomCartBtn.classList.add("cart-active");
+        } else {
+            bottomCartBtn.classList.remove("cart-active");
+            // Reset upsell when cart closes
+            upsellUsed = false;
+        }
+    }
+    
+    // Re-render cart to update layout based on current screen size
+    updateCart();
+}
+
+// Special function for upsell items - marks upsell as used on mobile
+function addUpsellItem(id, event) {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+        upsellUsed = true;
+    }
+    addToCart(id, event);
 }
 
 function openPolicy(type) { 
