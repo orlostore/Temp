@@ -197,12 +197,13 @@ window.changeMainImage = function(imgSrc, index) {
 window.addEventListener('DOMContentLoaded', () => {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const cartCount = document.getElementById("cartCount");
-  if (cartCount) {
-    const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
-    cartCount.textContent = totalItems;
-  }
+  const bottomCartCount = document.getElementById("bottomCartCount");
   
-  // Setup cart icon click
+  const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+  if (cartCount) cartCount.textContent = totalItems;
+  if (bottomCartCount) bottomCartCount.textContent = totalItems;
+  
+  // Setup cart icon click (desktop)
   const cartIcon = document.getElementById("cartIcon");
   const closeCart = document.getElementById("closeCart");
   if (cartIcon) {
@@ -216,7 +217,58 @@ window.addEventListener('DOMContentLoaded', () => {
       document.getElementById("cartSidebar").classList.remove("active");
     };
   }
+  
+  // Setup mobile bottom nav
+  const bottomHomeBtn = document.getElementById("bottomHomeBtn");
+  const bottomCartBtn = document.getElementById("bottomCartBtn");
+  const bottomMenuBtn = document.getElementById("bottomMenuBtn");
+  
+  if (bottomHomeBtn) {
+    bottomHomeBtn.onclick = () => {
+      window.location.href = "index.html";
+    };
+  }
+  
+  if (bottomCartBtn) {
+    bottomCartBtn.onclick = () => {
+      document.getElementById("cartSidebar").classList.toggle("active");
+      if (typeof updateCart === 'function') updateCart();
+    };
+  }
+  
+  if (bottomMenuBtn) {
+    bottomMenuBtn.onclick = () => {
+      toggleMobileMenuProduct();
+    };
+  }
 });
+
+// Mobile menu toggle for product page
+function toggleMobileMenuProduct() {
+  let overlay = document.querySelector('.mobile-menu-overlay');
+  
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'mobile-menu-overlay';
+    overlay.innerHTML = `
+      <div class="mobile-menu">
+        <a href="index.html#products"><span class="menu-en">🛍️ Shop</span> | <span class="menu-ar">تسوق</span></a>
+        <a href="index.html#about"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
+        <a href="index.html#contact"><span class="menu-en">📧 Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
+        <a href="index.html#terms"><span class="menu-en">📋 Terms</span> | <span class="menu-ar">الشروط</span></a>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    
+    overlay.onclick = (e) => {
+      if (e.target === overlay) {
+        overlay.classList.remove('active');
+      }
+    };
+  }
+  
+  overlay.classList.toggle('active');
+}
 
 // Start loading product page
 initProductPage();
