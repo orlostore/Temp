@@ -207,10 +207,11 @@ function updateCart() {
         const cartProductIds = cart.map(i => i.id);
         
         // Get upsell products (saved for consistency)
+        // Item price must be >= amountNeeded so subtotal + item >= 100
         if (!savedUpsellProducts) {
             savedUpsellProducts = products
                 .filter(p => !cartProductIds.includes(p.id))
-                .filter(p => (subtotal + p.price) >= 100)
+                .filter(p => p.price >= amountNeeded)
                 .sort((a, b) => a.price - b.price)
                 .slice(0, 3);
         }
@@ -243,18 +244,18 @@ function updateCart() {
                         🚚 Add ${amountNeeded.toFixed(0)} AED more to qualify for free delivery
                     </div>
                     ${availableUpsell.length > 0 ? `
-                        <details style="cursor: pointer;">
-                            <summary style="font-size: 0.8rem; color: #e07856; font-weight: 500; padding: 0.25rem 0;">View suggestions</summary>
-                            <div style="margin-top: 0.5rem;">
+                        <div style="cursor: pointer;" onclick="this.querySelector('.upsell-dropdown').style.display = this.querySelector('.upsell-dropdown').style.display === 'none' ? 'block' : 'none'; this.querySelector('.arrow').textContent = this.querySelector('.upsell-dropdown').style.display === 'none' ? '▶' : '▼';">
+                            <span style="font-size: 0.8rem; color: #e07856; font-weight: 500;"><span class="arrow">▶</span> View suggestions</span>
+                            <div class="upsell-dropdown" style="display: none; margin-top: 0.5rem;">
                                 ${availableUpsell.map(p => `
                                     <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
                                         <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
                                         <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${p.price} AED</div>
-                                        <button onclick="addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
+                                        <button onclick="event.stopPropagation(); addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
                                     </div>
                                 `).join('')}
                             </div>
-                        </details>
+                        </div>
                     ` : ''}
                 </div>
             `;
