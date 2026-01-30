@@ -414,6 +414,12 @@ window.onload = () => {
     loadProducts(); 
     updateCart(); 
     
+    // Update mobile promo banner with current threshold
+    const promoBanner = document.querySelector('.mobile-promo-banner');
+    if (promoBanner) {
+        promoBanner.innerHTML = `🚚 Free delivery over ${FREE_DELIVERY_THRESHOLD} AED | <span class="arabic-text">توصيل مجاني فوق ${FREE_DELIVERY_THRESHOLD} درهم</span>`;
+    }
+    
     const hamburger = document.getElementById("hamburger");
     const navLinks = document.getElementById("navLinks");
     
