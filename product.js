@@ -346,7 +346,25 @@ function openEnhancedLightbox(product, startIndex) {
     <div class="lightbox-divider"></div>
   `;
   
-  // Colors
+  // 1. Description (first - what is the product?)
+  const desc = product.detailedDescription || product.description;
+  const descAr = product.detailedDescriptionAr || product.descriptionAr;
+  if (desc) {
+    infoHTML += `
+      <div class="lightbox-detail-block">
+        <div class="lightbox-detail-label">
+          <span>Description</span>
+          <span class="ar">معلومات المنتج</span>
+        </div>
+        <div class="lightbox-detail-value">
+          ${desc}
+          ${descAr ? `<span class="ar">${descAr}</span>` : ''}
+        </div>
+      </div>
+    `;
+  }
+  
+  // 2. Colors
   if (product.colors) {
     infoHTML += `
       <div class="lightbox-detail-block">
@@ -362,7 +380,7 @@ function openEnhancedLightbox(product, startIndex) {
     `;
   }
   
-  // Packaging
+  // 3. Packaging
   if (product.packaging) {
     infoHTML += `
       <div class="lightbox-detail-block">
@@ -378,7 +396,7 @@ function openEnhancedLightbox(product, startIndex) {
     `;
   }
   
-  // Specifications
+  // 4. Specifications (last - technical details)
   if (product.specifications && product.specifications.length > 0) {
     infoHTML += `
       <div class="lightbox-detail-block">
@@ -389,24 +407,6 @@ function openEnhancedLightbox(product, startIndex) {
         <div class="lightbox-detail-value">
           ${product.specifications.join('<br>')}
           ${product.specificationsAr ? `<span class="ar">${product.specificationsAr.join('<br>')}</span>` : ''}
-        </div>
-      </div>
-    `;
-  }
-  
-  // Description
-  const desc = product.detailedDescription || product.description;
-  const descAr = product.detailedDescriptionAr || product.descriptionAr;
-  if (desc) {
-    infoHTML += `
-      <div class="lightbox-detail-block">
-        <div class="lightbox-detail-label">
-          <span>Description</span>
-          <span class="ar">معلومات المنتج</span>
-        </div>
-        <div class="lightbox-detail-value">
-          ${desc}
-          ${descAr ? `<span class="ar">${descAr}</span>` : ''}
         </div>
       </div>
     `;
