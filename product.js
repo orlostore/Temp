@@ -137,10 +137,11 @@ async function initProductPage() {
     
     // Update cart count if element exists
     const cartCount = document.getElementById("cartCount");
-    if (cartCount) {
-      const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
-      cartCount.textContent = totalItems;
-    }
+    const bottomCartCount = document.getElementById("bottomCartCount");
+    const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+    
+    if (cartCount) cartCount.textContent = totalItems;
+    if (bottomCartCount) bottomCartCount.textContent = totalItems;
     
     // Button turns green with "✓ Added!"
     const btn = document.getElementById("addToCartBtn");
