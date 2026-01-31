@@ -324,30 +324,211 @@ async function initProductPage() {
     }, 2000);
   };
 
-  // Desktop lightbox
+  // Desktop lightbox - Enhanced version with product info
   const mainImg = document.getElementById('mainImage');
   if (mainImg) {
     mainImg.style.cursor = 'zoom-in';
     mainImg.onclick = () => {
-      const lightbox = document.createElement('div');
-      lightbox.className = 'lightbox';
-      lightbox.innerHTML = `
-        <div class="lightbox-content">
-          <span class="lightbox-close">&times;</span>
-          <img src="${mainImg.src}" alt="${product.name}" class="lightbox-image">
-        </div>
-      `;
-      document.body.appendChild(lightbox);
-      document.body.style.overflow = 'hidden';
-      
-      lightbox.onclick = (e) => {
-        if (e.target === lightbox || e.target.className === 'lightbox-close') {
-          document.body.removeChild(lightbox);
-          document.body.style.overflow = 'auto';
-        }
-      };
+      openEnhancedLightbox(product, 0);
     };
   }
+}
+
+// Enhanced Lightbox with product info, thumbnails, and arrows
+function openEnhancedLightbox(product, startIndex) {
+  let currentIndex = startIndex;
+  const images = product.images;
+  
+  // Build info HTML
+  let infoHTML = `
+    <div class="lightbox-title">${product.name}</div>
+    ${product.nameAr ? `<div class="lightbox-title-ar">${product.nameAr}</div>` : ''}
+    <div class="lightbox-divider"></div>
+  `;
+  
+  // Colors
+  if (product.colors) {
+    infoHTML += `
+      <div class="lightbox-detail-block">
+        <div class="lightbox-detail-label">
+          <span>Available Colors</span>
+          <span class="ar">الألوان المتاحة</span>
+        </div>
+        <div class="lightbox-detail-value">
+          ${product.colors}
+          ${product.colorsAr ? `<span class="ar">${product.colorsAr}</span>` : ''}
+        </div>
+      </div>
+    `;
+  }
+  
+  // Packaging
+  if (product.packaging) {
+    infoHTML += `
+      <div class="lightbox-detail-block">
+        <div class="lightbox-detail-label">
+          <span>Packaging</span>
+          <span class="ar">التعبئة والتغليف</span>
+        </div>
+        <div class="lightbox-detail-value">
+          ${product.packaging}
+          ${product.packagingAr ? `<span class="ar">${product.packagingAr}</span>` : ''}
+        </div>
+      </div>
+    `;
+  }
+  
+  // Specifications
+  if (product.specifications && product.specifications.length > 0) {
+    infoHTML += `
+      <div class="lightbox-detail-block">
+        <div class="lightbox-detail-label">
+          <span>Specifications</span>
+          <span class="ar">المواصفات</span>
+        </div>
+        <div class="lightbox-detail-value">
+          ${product.specifications.join('<br>')}
+          ${product.specificationsAr ? `<span class="ar">${product.specificationsAr.join('<br>')}</span>` : ''}
+        </div>
+      </div>
+    `;
+  }
+  
+  // Description
+  const desc = product.detailedDescription || product.description;
+  const descAr = product.detailedDescriptionAr || product.descriptionAr;
+  if (desc) {
+    infoHTML += `
+      <div class="lightbox-detail-block">
+        <div class="lightbox-detail-label">
+          <span>Description</span>
+          <span class="ar">معلومات المنتج</span>
+        </div>
+        <div class="lightbox-detail-value">
+          ${desc}
+          ${descAr ? `<span class="ar">${descAr}</span>` : ''}
+        </div>
+      </div>
+    `;
+  }
+  
+  // Build thumbnails HTML
+  const thumbnailsHTML = images.length > 1 ? `
+    <div class="lightbox-thumbnails">
+      ${images.map((img, i) => `
+        <div class="lightbox-thumb ${i === currentIndex ? 'active' : ''}" data-index="${i}">
+          <img src="${img}" alt="Thumbnail ${i + 1}">
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+  
+  // Build arrows HTML (only if multiple images)
+  const arrowsHTML = images.length > 1 ? `
+    <button class="lightbox-arrow prev">‹</button>
+    <button class="lightbox-arrow next">›</button>
+  ` : '';
+  
+  // Counter HTML
+  const counterHTML = images.length > 1 ? `
+    <div class="lightbox-counter">${currentIndex + 1} / ${images.length}</div>
+  ` : '';
+  
+  // Create lightbox
+  const lightbox = document.createElement('div');
+  lightbox.className = 'lightbox';
+  lightbox.innerHTML = `
+    <button class="lightbox-close">×</button>
+    <div class="lightbox-content">
+      <div class="lightbox-image-section">
+        <div class="lightbox-main-image">
+          ${arrowsHTML}
+          <img src="${images[currentIndex]}" alt="${product.name}" id="lightboxMainImg">
+        </div>
+        ${counterHTML}
+        ${thumbnailsHTML}
+      </div>
+      <div class="lightbox-info-section">
+        ${infoHTML}
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(lightbox);
+  document.body.style.overflow = 'hidden';
+  
+  // Get elements
+  const lightboxImg = document.getElementById('lightboxMainImg');
+  const counter = lightbox.querySelector('.lightbox-counter');
+  const thumbs = lightbox.querySelectorAll('.lightbox-thumb');
+  
+  // Update image function
+  const updateImage = (index) => {
+    currentIndex = index;
+    lightboxImg.src = images[currentIndex];
+    if (counter) counter.textContent = `${currentIndex + 1} / ${images.length}`;
+    
+    // Update active thumbnail
+    thumbs.forEach((thumb, i) => {
+      thumb.classList.toggle('active', i === currentIndex);
+    });
+  };
+  
+  // Arrow click handlers
+  const prevBtn = lightbox.querySelector('.lightbox-arrow.prev');
+  const nextBtn = lightbox.querySelector('.lightbox-arrow.next');
+  
+  if (prevBtn) {
+    prevBtn.onclick = (e) => {
+      e.stopPropagation();
+      const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+      updateImage(newIndex);
+    };
+  }
+  
+  if (nextBtn) {
+    nextBtn.onclick = (e) => {
+      e.stopPropagation();
+      const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
+      updateImage(newIndex);
+    };
+  }
+  
+  // Thumbnail click handlers
+  thumbs.forEach((thumb, i) => {
+    thumb.onclick = (e) => {
+      e.stopPropagation();
+      updateImage(i);
+    };
+  });
+  
+  // Keyboard navigation
+  const handleKeydown = (e) => {
+    if (e.key === 'ArrowLeft' && images.length > 1) {
+      const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+      updateImage(newIndex);
+    } else if (e.key === 'ArrowRight' && images.length > 1) {
+      const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
+      updateImage(newIndex);
+    } else if (e.key === 'Escape') {
+      closeLightbox();
+    }
+  };
+  
+  document.addEventListener('keydown', handleKeydown);
+  
+  // Close function
+  const closeLightbox = () => {
+    document.body.removeChild(lightbox);
+    document.body.style.overflow = 'auto';
+    document.removeEventListener('keydown', handleKeydown);
+  };
+  
+  // Close handlers
+  lightbox.querySelector('.lightbox-close').onclick = closeLightbox;
+  lightbox.onclick = (e) => {
+    if (e.target === lightbox) closeLightbox();
+  };
 }
 
 // Mobile carousel scroll handler
