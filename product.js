@@ -472,8 +472,33 @@ function openEnhancedLightbox(product, startIndex) {
   
   // Get elements
   const lightboxImg = document.getElementById('lightboxMainImg');
+  const lightboxMainImageContainer = lightbox.querySelector('.lightbox-main-image');
   const counter = lightbox.querySelector('.lightbox-counter');
   const thumbs = lightbox.querySelectorAll('.lightbox-thumb');
+  
+  // Dynamic zoom on hover - follows cursor
+  let isZoomed = false;
+  
+  lightboxMainImageContainer.addEventListener('mouseenter', () => {
+    isZoomed = true;
+    lightboxImg.style.transform = 'scale(2)';
+  });
+  
+  lightboxMainImageContainer.addEventListener('mouseleave', () => {
+    isZoomed = false;
+    lightboxImg.style.transform = 'scale(1)';
+    lightboxImg.style.transformOrigin = 'center center';
+  });
+  
+  lightboxMainImageContainer.addEventListener('mousemove', (e) => {
+    if (!isZoomed) return;
+    
+    const rect = lightboxMainImageContainer.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    lightboxImg.style.transformOrigin = `${x}% ${y}%`;
+  });
   
   // Update image function
   const updateImage = (index) => {
