@@ -431,7 +431,8 @@ nav {
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(214.4px, 214.4px));
-  gap: 1.68rem;
+  column-gap: 1.68rem;
+  row-gap: 1rem;
   max-width: 1180px;
   margin: 0 auto;
   justify-content: center;
