@@ -275,6 +275,11 @@ async function initProductPage() {
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems;
     
+    // Update cart display immediately (from app.js)
+    if (typeof updateCart === 'function') {
+      updateCart();
+    }
+    
     return true;
   };
 
@@ -438,6 +443,30 @@ function setupSearch() {
 }
 
 // =====================
+// CART TOGGLE FUNCTIONALITY (shared by mobile and desktop)
+// =====================
+function toggleCartSidebar() {
+  const cartSidebar = document.getElementById('cartSidebar');
+  const bottomCartBtn = document.getElementById('bottomCartBtn');
+  const bottomHomeBtn = document.getElementById('bottomHomeBtn');
+  
+  if (cartSidebar) {
+    cartSidebar.classList.toggle('active');
+    
+    if (cartSidebar.classList.contains('active')) {
+      if (bottomCartBtn) bottomCartBtn.classList.add('cart-active');
+      if (bottomHomeBtn) bottomHomeBtn.classList.remove('home-active');
+      // Update cart display
+      if (typeof updateCart === 'function') {
+        updateCart();
+      }
+    } else {
+      if (bottomCartBtn) bottomCartBtn.classList.remove('cart-active');
+    }
+  }
+}
+
+// =====================
 // BOTTOM NAV FUNCTIONALITY
 // =====================
 function setupBottomNav() {
@@ -455,22 +484,7 @@ function setupBottomNav() {
   
   // Cart button - toggle cart sidebar
   if (bottomCartBtn) {
-    bottomCartBtn.onclick = function() {
-      if (cartSidebar) {
-        cartSidebar.classList.toggle('active');
-        
-        if (cartSidebar.classList.contains('active')) {
-          bottomCartBtn.classList.add('cart-active');
-          if (bottomHomeBtn) bottomHomeBtn.classList.remove('home-active');
-          // Update cart display
-          if (typeof updateCart === 'function') {
-            updateCart();
-          }
-        } else {
-          bottomCartBtn.classList.remove('cart-active');
-        }
-      }
-    };
+    bottomCartBtn.onclick = toggleCartSidebar;
   }
   
   // Menu button - show mobile menu overlay
@@ -496,6 +510,12 @@ function setupBottomNav() {
       }
     };
   }
+  
+  // Desktop cart icon (in nav)
+  const cartIcon = document.getElementById('cartIcon');
+  if (cartIcon) {
+    cartIcon.onclick = toggleCartSidebar;
+  }
 }
 
 // Mobile menu toggle
@@ -508,7 +528,7 @@ function toggleMobileMenu() {
     overlay.innerHTML = `
       <div class="mobile-menu">
         <a href="index.html#products" onclick="closeMobileMenu()"><span class="menu-en">🛍️ Shop</span> | <span class="menu-ar">تسوق</span></a>
-        <a href="index.html#about" onclick="closeMobileMenu()"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
+        <a href="index.html?showAbout=true#about" onclick="closeMobileMenu()"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
         <a href="index.html#contact" onclick="closeMobileMenu()"><span class="menu-en">📧 Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
         <a href="index.html#terms" onclick="closeMobileMenu()"><span class="menu-en">📋 Terms</span> | <span class="menu-ar">الشروط</span></a>
       </div>
