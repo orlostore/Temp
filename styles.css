@@ -47,17 +47,17 @@ footer {
   --white: #ffffff;
 }
 
-/* UAE Dirham Symbol */
+/* UAE Dirham Symbol - Official SVG */
 .dirham-symbol {
   display: inline-block;
-  width: 0.85em;
-  height: 0.85em;
-  background-image: url('dirham-symbol.png');
+  width: 0.7em;
+  height: 0.7em;
+  background-image: url('dirham.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   vertical-align: baseline;
-  margin-right: 0.15em;
+  margin-right: 0.12em;
 }
 
 .arabic-text {
@@ -535,7 +535,7 @@ nav {
 }
 
 .product-price {
-  color: var(--accent);
+  color: #1a1a1a;
   font-weight: bold;
   margin: 0.67rem 0;
   font-size: 1.27rem;
@@ -1168,7 +1168,7 @@ footer p {
 .product-buybox .price {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--accent);
+  color: #1a1a1a;
   margin-bottom: 1rem;
 }
 
@@ -1953,7 +1953,7 @@ footer p {
 .mobile-price {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #e07856;
+  color: #1a1a1a;
 }
 
 /* Mobile Add to Cart */
