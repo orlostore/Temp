@@ -1905,15 +1905,16 @@ footer p {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: #fafafa;
+  padding: 0;
+  background: white;
   cursor: pointer;
 }
 
 .mobile-carousel-slide img {
-  max-width: 100%;
-  max-height: 300px;
+  width: 100%;
+  height: 300px;
   object-fit: contain;
+  background: white;
 }
 
 /* Dot Indicators */
@@ -1946,7 +1947,7 @@ footer p {
 }
 
 .mobile-price {
-  font-size: 1.6rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #e07856;
 }
