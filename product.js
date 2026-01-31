@@ -457,8 +457,8 @@ function openEnhancedLightbox(product, startIndex) {
         <div class="lightbox-main-image">
           ${arrowsHTML}
           <img src="${images[currentIndex]}" alt="${product.name}" id="lightboxMainImg">
+          ${counterHTML}
         </div>
-        ${counterHTML}
         ${thumbnailsHTML}
       </div>
       <div class="lightbox-info-section">
