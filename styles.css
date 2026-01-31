@@ -522,7 +522,7 @@ nav {
 }
 
 .product-price {
-  color: #1a1a1a;
+  color: var(--accent);
   font-weight: bold;
   margin: 0.67rem 0;
   font-size: 1rem;
@@ -1155,7 +1155,7 @@ footer p {
 .product-buybox .price {
   font-size: 2rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--accent);
   margin-bottom: 1rem;
 }
 
@@ -1940,7 +1940,7 @@ footer p {
 .mobile-price {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #e07856;
 }
 
 /* Mobile Add to Cart */
