@@ -423,6 +423,28 @@ window.onload = () => {
     loadProducts(); 
     updateCart(); 
     
+    // Check for showAbout parameter (from product page About link)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('showAbout') === 'true') {
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) {
+            aboutSection.style.display = 'block';
+            setTimeout(() => {
+                aboutSection.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+    }
+    
+    // Check for search parameter (from product page search)
+    const searchTerm = urlParams.get('search');
+    if (searchTerm) {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.value = searchTerm;
+            searchProducts();
+        }
+    }
+    
     // Update mobile promo banner with current threshold
     const promoBanner = document.querySelector('.mobile-promo-banner');
     if (promoBanner) {
