@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Product - ORLO Store</title>
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,31 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <style>
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #e07856;
-      color: white;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 25px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.3s;
-      margin-bottom: 1.5rem;
-    }
-    .back-link:hover {
-      background: #2c4a5c;
-      transform: translateX(-5px);
-    }
-    .back-link svg {
-      width: 18px;
-      height: 18px;
-      fill: currentColor;
-    }
-  </style>
 </head>
 <body>
 <header>
@@ -68,9 +43,11 @@
         </ul>
     </nav>
 </header>
-<div class="product-page-container">
+
+<!-- DESKTOP LAYOUT -->
+<div class="product-page-container desktop-product">
   <a href="index.html" class="back-link">
-    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
     Back to Products
   </a>
   
@@ -85,14 +62,75 @@
       <div class="price" id="productPrice"></div>
       <button class="add-to-cart-btn" id="addToCartBtn">Add to Cart</button>
       <div class="delivery-info">
-        <p>✓ Free delivery on orders over 100 AED</p>
+        <p>✓ Free delivery on orders over <span class="threshold-value"></span> AED</p>
         <p>✓ 2-5 business days delivery</p>
-        <p>✓ 7-day return policy</p>
       </div>
     </div>
   </div>
 </div>
+
+<!-- MOBILE LAYOUT (Amazon-style) -->
+<div class="mobile-product-page">
+  <!-- Product Header -->
+  <div class="mobile-product-header">
+    <h1 class="mobile-product-title" id="mobileProductTitle"></h1>
+    <p class="mobile-product-title-ar arabic-text" id="mobileProductTitleAr"></p>
+    <span class="mobile-product-category" id="mobileProductCategory"></span>
+  </div>
+  
+  <!-- Image Carousel -->
+  <div class="mobile-carousel-container">
+    <div class="mobile-carousel" id="mobileCarousel"></div>
+    <div class="mobile-dots" id="mobileDots"></div>
+  </div>
+  
+  <!-- Price Section -->
+  <div class="mobile-price-section">
+    <div class="mobile-price" id="mobileProductPrice"></div>
+  </div>
+  
+  <!-- Add to Cart -->
+  <div class="mobile-cart-section">
+    <button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | أضف إلى السلة</button>
+  </div>
+  
+  <!-- Delivery Info -->
+  <div class="mobile-delivery-info">
+    <div class="mobile-delivery-item">
+      <span class="mobile-delivery-icon">🚚</span>
+      <div>
+        <div>Free delivery over <span class="threshold-value"></span> AED</div>
+        <div class="mobile-delivery-ar arabic-text">توصيل مجاني فوق <span class="threshold-value-ar"></span> درهم</div>
+      </div>
+    </div>
+    <div class="mobile-delivery-item">
+      <span class="mobile-delivery-icon">📦</span>
+      <div>
+        <div>2-5 business days</div>
+        <div class="mobile-delivery-ar arabic-text">٢-٥ أيام عمل</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Specs Section -->
+  <div class="mobile-specs-section" id="mobileSpecsSection"></div>
+  
+  <!-- Description Section (no header on mobile) -->
+  <div class="mobile-description-section">
+    <p class="mobile-description-text" id="mobileDescriptionEn"></p>
+    <p class="mobile-description-text arabic-text" id="mobileDescriptionAr"></p>
+  </div>
+</div>
+
+<!-- Full Gallery Overlay -->
+<div class="gallery-overlay" id="galleryOverlay">
+  <button class="gallery-close" id="galleryClose">✕</button>
+  <div class="gallery-scroll" id="galleryScroll"></div>
+</div>
+
+<!-- Cart Sidebar -->
 <div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-checkout-fixed" id="cartCheckoutFixed"></div>
   <div class="cart-header">
     <h2>Your Cart / سلة التسوق</h2>
     <button class="close-cart" id="closeCart">✕</button>
@@ -102,7 +140,7 @@
 </div>
 
 <!-- Mobile Bottom Navigation -->
-<nav class="mobile-bottom-nav">
+<nav class="mobile-bottom-nav" id="mobileBottomNav">
     <div class="bottom-nav-item" id="bottomHomeBtn">
         <span class="nav-icon">🏠</span>
         <span class="nav-label">Home</span>
@@ -120,8 +158,8 @@
     </div>
 </nav>
 
-<script src="products.js?v=3"></script>
-<script src="product.js?v=3"></script>
-<script src="app.js?v=3"></script>
+<script src="products.js"></script>
+<script src="product.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
