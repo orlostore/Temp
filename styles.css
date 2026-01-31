@@ -50,14 +50,14 @@ footer {
 /* UAE Dirham Symbol - Official SVG */
 .dirham-symbol {
   display: inline-block;
-  width: 0.7em;
-  height: 0.7em;
+  width: 1em;
+  height: 1em;
   background-image: url('dirham.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   vertical-align: baseline;
-  margin-right: 0.12em;
+  margin-right: 0.1em;
 }
 
 .arabic-text {
