@@ -218,14 +218,14 @@ nav {
 .hero {
   background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%);
   color: #fff;
-  padding: 18px 30px;
+  padding: 12px 25px;
   max-width: 1180px;
   margin: 0.5rem auto 0.8rem auto;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 25px;
+  gap: 20px;
 }
 
 .hero.hidden {
@@ -325,35 +325,35 @@ nav {
 .hero-delivery-box {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  padding: 12px 18px;
+  padding: 8px 14px;
   text-align: center;
-  min-width: 140px;
+  min-width: 130px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .hero-delivery-box .delivery-icon {
-  font-size: 1.4rem;
-  margin-bottom: 3px;
+  font-size: 1.2rem;
+  margin-bottom: 2px;
 }
 
 .hero-delivery-box .delivery-title {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  margin-bottom: 1px;
+  margin-bottom: 0px;
 }
 
 .hero-delivery-box .delivery-highlight {
   color: #4ade80;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .hero-delivery-box .delivery-ar {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   opacity: 0.85;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 /* Hide old hero elements */
