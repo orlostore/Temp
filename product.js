@@ -209,9 +209,9 @@ async function initProductPage() {
           <span>Description</span>
           <span class="arabic-text">معلومات المنتج</span>
         </div>
-        <div class="mobile-detail-content mobile-description-content">
-          ${mobileDescEn ? `<p>${mobileDescEn}</p>` : ''}
-          ${mobileDescAr ? `<p class="arabic-text">${mobileDescAr}</p>` : ''}
+        <div class="mobile-detail-content">
+          <p>${mobileDescEn}</p>
+          <p class="arabic-text">${mobileDescAr}</p>
         </div>
       </div>
     `;
@@ -227,7 +227,7 @@ async function initProductPage() {
         </div>
         <div class="mobile-detail-content">
           <p>${product.colors}</p>
-          ${product.colorsAr ? `<p class="arabic-text">${product.colorsAr}</p>` : ''}
+          <p class="arabic-text">${product.colorsAr || ''}</p>
         </div>
       </div>
     `;
@@ -243,7 +243,7 @@ async function initProductPage() {
         </div>
         <div class="mobile-detail-content">
           <p>${product.packaging}</p>
-          ${product.packagingAr ? `<p class="arabic-text">${product.packagingAr}</p>` : ''}
+          <p class="arabic-text">${product.packagingAr || ''}</p>
         </div>
       </div>
     `;
@@ -258,12 +258,8 @@ async function initProductPage() {
           <span class="arabic-text">المواصفات</span>
         </div>
         <div class="mobile-detail-content">
-          ${product.specifications.map((spec, i) => `
-            <div class="mobile-spec-row">
-              <span class="mobile-spec-en">${spec}</span>
-              <span class="mobile-spec-ar arabic-text">${product.specificationsAr && product.specificationsAr[i] ? product.specificationsAr[i] : ''}</span>
-            </div>
-          `).join('')}
+          <p>${product.specifications.join('<br>')}</p>
+          <p class="arabic-text">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</p>
         </div>
       </div>
     `;
