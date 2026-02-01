@@ -740,7 +740,7 @@ function setupBottomNav() {
         if (bottomCartBtn) bottomCartBtn.classList.remove('cart-active');
       }
       
-      toggleMobileMenu();
+      productPageToggleMobileMenu();
     };
   }
   
@@ -762,8 +762,8 @@ function setupBottomNav() {
   }
 }
 
-// Mobile menu toggle
-function toggleMobileMenu() {
+// Mobile menu toggle - renamed to avoid conflict with app.js
+function productPageToggleMobileMenu() {
   let overlay = document.querySelector('.mobile-menu-overlay');
   
   if (!overlay) {
@@ -771,29 +771,30 @@ function toggleMobileMenu() {
     overlay.className = 'mobile-menu-overlay';
     overlay.innerHTML = `
       <div class="mobile-menu">
-        <a href="index.html#products" onclick="closeMobileMenu()"><span class="menu-en">🛍️ Shop</span> | <span class="menu-ar">تسوق</span></a>
-        <a href="index.html?showAbout=true#about" onclick="closeMobileMenu()"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
-        <a href="index.html#contact" onclick="closeMobileMenu()"><span class="menu-en">📧 Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
-        <a href="index.html#terms" onclick="closeMobileMenu()"><span class="menu-en">📋 Terms</span> | <span class="menu-ar">الشروط</span></a>
+        <a href="index.html#products"><span class="menu-en">🛍️ Shop</span> | <span class="menu-ar">تسوق</span></a>
+        <a href="index.html?showAbout=true#about"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
+        <a href="index.html#contact"><span class="menu-en">📧 Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
+        <a href="index.html#terms"><span class="menu-en">📋 Terms</span> | <span class="menu-ar">الشروط</span></a>
       </div>
     `;
     document.body.appendChild(overlay);
     
+    // Close when clicking outside the menu
     overlay.onclick = (e) => {
       if (e.target === overlay) {
-        closeMobileMenu();
+        overlay.classList.remove('active');
       }
     };
+    
+    // Add click handlers to menu links
+    overlay.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.onclick = () => {
+        overlay.classList.remove('active');
+      };
+    });
   }
   
   overlay.classList.toggle('active');
-}
-
-function closeMobileMenu() {
-  const overlay = document.querySelector('.mobile-menu-overlay');
-  if (overlay) {
-    overlay.classList.remove('active');
-  }
 }
 
 // =====================
