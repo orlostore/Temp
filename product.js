@@ -193,12 +193,27 @@ async function initProductPage() {
   }
 
   // =====================
-  // MOBILE DETAILS SECTION (Colors, Packaging, Specs, Description - in order)
+  // MOBILE DETAILS SECTION (Description, Colors, Packaging, Specs - in order)
   // =====================
   const detailsContainer = document.getElementById("mobileDetailsSection");
   let detailsHTML = '';
 
-  // 1. Colors (if available)
+  // 1. Description (always show if available)
+  const mobileDescEn = product.detailedDescription || product.description || '';
+  const mobileDescAr = product.detailedDescriptionAr || product.descriptionAr || '';
+  
+  if (mobileDescEn || mobileDescAr) {
+    detailsHTML += `
+      <div class="mobile-detail-block">
+        <div class="mobile-detail-content mobile-description-content">
+          ${mobileDescEn ? `<p>${mobileDescEn}</p>` : ''}
+          ${mobileDescAr ? `<p class="arabic-text">${mobileDescAr}</p>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  // 2. Colors (if available)
   if (product.colors) {
     detailsHTML += `
       <div class="mobile-detail-block">
@@ -214,7 +229,7 @@ async function initProductPage() {
     `;
   }
 
-  // 2. Packaging (if available)
+  // 3. Packaging (if available)
   if (product.packaging) {
     detailsHTML += `
       <div class="mobile-detail-block">
@@ -230,7 +245,7 @@ async function initProductPage() {
     `;
   }
 
-  // 3. Specifications (if available)
+  // 4. Specifications (if available)
   if (product.specifications && product.specifications.length > 0) {
     detailsHTML += `
       <div class="mobile-detail-block">
@@ -245,21 +260,6 @@ async function initProductPage() {
               <span class="mobile-spec-ar arabic-text">${product.specificationsAr && product.specificationsAr[i] ? product.specificationsAr[i] : ''}</span>
             </div>
           `).join('')}
-        </div>
-      </div>
-    `;
-  }
-
-  // 4. Description (always show if available)
-  const mobileDescEn = product.detailedDescription || product.description || '';
-  const mobileDescAr = product.detailedDescriptionAr || product.descriptionAr || '';
-  
-  if (mobileDescEn || mobileDescAr) {
-    detailsHTML += `
-      <div class="mobile-detail-block">
-        <div class="mobile-detail-content mobile-description-content">
-          ${mobileDescEn ? `<p>${mobileDescEn}</p>` : ''}
-          ${mobileDescAr ? `<p class="arabic-text">${mobileDescAr}</p>` : ''}
         </div>
       </div>
     `;
