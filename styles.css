@@ -570,7 +570,7 @@ nav {
 
 .contact-section {
   background: var(--bg);
-  padding: 0;
+  padding: 1rem 0;
 }
 
 .contact-container {
