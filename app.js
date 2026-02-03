@@ -434,7 +434,7 @@ function toggleMobileMenu() {
         overlay.innerHTML = `
             <div class="mobile-menu">
                 <a href="#products" onclick="closeMobileMenu()"><span class="menu-en">🛍️ Shop</span> | <span class="menu-ar">تسوق</span></a>
-                <a href="javascript:void(0);" onclick="toggleAbout(); closeMobileMenu();"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
+                <a href="#about" onclick="closeMobileMenu()"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
                 <a href="#contact" onclick="closeMobileMenu()"><span class="menu-en">📧 Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
                 <a href="#terms" onclick="closeMobileMenu()"><span class="menu-en">📋 Terms</span> | <span class="menu-ar">الشروط</span></a>
             </div>
