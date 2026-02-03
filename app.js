@@ -82,6 +82,43 @@ function renderProducts(list) {
             ${p.featured ? `<span class="badge">Best Seller</span>` : ""}
             ${outOfStock ? `<span class="badge out-of-stock-badge">Out of Stock</span>` : ""}
             <a href="product.html?product=${p.slug}" style="text-decoration:none;">
+                function renderProducts(list) { 
+    const grid = document.getElementById("productsGrid"); 
+    if (!list.length) { 
+        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#999;padding:3rem;">No products found</p>`; 
+        return; 
+    } 
+    grid.innerHTML = list.map(p => {
+        const isUrl = p.image && p.image.startsWith('http');
+        const imageHTML = isUrl 
+            ? `<img src="${p.image}" alt="${p.name}" style="max-width:100%; max-height:100%; object-fit:contain;">` 
+            : p.image;
+        
+        // Check if out of stock
+        const outOfStock = p.quantity === 0;
+        
+        // Check if product is already in cart
+        const cartItem = cart.find(i => i.id === p.id);
+        const inCart = cartItem && cartItem.quantity > 0;
+        const cartQty = cartItem ? cartItem.quantity : 0;
+        
+        // Determine button HTML
+        let buttonHTML;
+        if (outOfStock) {
+            buttonHTML = `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>`;
+        } else if (inCart) {
+            buttonHTML = `<button class="add-to-cart view-cart-state" onclick="toggleCart()" data-product-id="${p.id}">
+                <span class="cart-btn-icon">🛒<span class="cart-btn-badge">${cartQty}</span></span> View Cart | <span class="arabic-text" style="display:inline;">عرض السلة</span>
+            </button>`;
+        } else {
+            buttonHTML = `<button class="add-to-cart" onclick="addToCart(${p.id}, event)" data-product-id="${p.id}">Add to Cart | أضف للسلة</button>`;
+        }
+        
+        return `
+        <div class="product-card ${outOfStock ? 'out-of-stock' : ''}">
+            ${p.featured ? `<span class="badge">Best Seller</span>` : ""}
+            ${outOfStock ? `<span class="badge out-of-stock-badge">Out of Stock</span>` : ""}
+            <a href="product.html?product=${p.slug}" style="text-decoration:none;">
                 <div class="product-image">${imageHTML}</div>
             </a>
             <div class="product-info">
@@ -90,40 +127,11 @@ function renderProducts(list) {
                     ${p.nameAr ? `<p class="product-title-ar">${p.nameAr}</p>` : ''}
                 </a>
                 <div class="product-price">AED ${p.price}</div>
-                ${outOfStock 
-                    ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>` 
-                    : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | أضف إلى السلة</button>`
-                }
+                ${buttonHTML}
             </div>
         </div>
     `}).join(""); 
 }
-
-function loadProducts(category = "All Products") { 
-    selectedCategory = category; 
-    const list = category === "All Products" ? products : products.filter(p => p.category === category); 
-    renderProducts(list); 
-    updateCategoryButtons(); 
-    const heroSection = document.querySelector(".hero"); 
-    const searchInput = document.getElementById("searchInput"); 
-    if (heroSection && (!searchInput || !searchInput.value.trim())) { 
-        heroSection.classList.remove("hidden"); 
-    } 
-}
-
-function createCategoryFilters() { 
-    const container = document.getElementById("categoryFilters"); 
-    container.innerHTML = getCategories().map(cat => {
-        const catAr = getCategoryArabic(cat);
-        return `<button class="category-btn ${cat === selectedCategory ? "active" : ""}" onclick="loadProducts('${cat}')">${cat}${catAr ? `<br><span class="arabic-text category-arabic">${catAr}</span>` : ''}</button>`;
-    }).join(""); 
-}
-
-function updateCategoryButtons() { 
-    document.querySelectorAll(".category-btn").forEach(btn => { 
-        const firstLine = btn.childNodes[0]; 
-        if (firstLine && firstLine.textContent) { 
-            const catText = firstLine.textContent.trim(); 
             btn.classList.toggle("active", catText === selectedCategory); 
         } 
     }); 
