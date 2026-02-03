@@ -547,8 +547,8 @@ nav {
 }
 
 .about-section {
-  background: white;
-  padding: 2.68rem 0;
+  background: var(--bg);
+  padding: 0;
 }
 
 .about-section p {
