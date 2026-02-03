@@ -168,19 +168,63 @@ function addToCart(id, event) {
     saveCart(); 
     updateCart(); 
     
-    if (event && event.target) {
-        const btn = event.target;
-        const originalText = btn.textContent;
-        const originalBg = btn.style.background;
-        
-        btn.textContent = "✓ Added!";
-        btn.style.background = "#28a745";
-        
-        setTimeout(() => {
-            btn.textContent = originalText;
-            btn.style.background = originalBg || "";
-        }, 2000);
-    }
+    // Show grand popup
+    showCartPopup(product);
+}
+
+function showCartPopup(product) {
+    const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const productQty = cart.find(i => i.id === product.id)?.quantity || 1;
+    
+    // Get product image
+    const isUrl = product.image && product.image.startsWith('http');
+    const imageHTML = isUrl 
+        ? `<img src="${product.image}" alt="${product.name}" style="width:100%; height:100%; object-fit:contain;">` 
+        : `<span style="font-size:3rem;">${product.image || '📦'}</span>`;
+    
+    const popup = document.getElementById('cartPopup');
+    const popupContent = document.getElementById('cartPopupContent');
+    
+    popupContent.innerHTML = `
+        <div class="popup-top">
+            <button class="popup-close-btn" onclick="closeCartPopup()">✕</button>
+            <div class="popup-success-badge">✓ Success!</div>
+            <div class="popup-title">Added to Cart</div>
+            <div class="popup-title-ar">تمت الإضافة للسلة</div>
+        </div>
+        <div class="popup-product-float">
+            <div class="popup-product-card">
+                <div class="popup-product-image">${imageHTML}</div>
+                <div class="popup-product-details">
+                    <div class="popup-product-name">${product.name}</div>
+                    ${product.nameAr ? `<div class="popup-product-name-ar">${product.nameAr}</div>` : ''}
+                    <div class="popup-product-price">AED ${product.price}</div>
+                </div>
+            </div>
+        </div>
+        <div class="popup-bottom">
+            <div class="popup-cart-summary">
+                <span class="popup-summary-label">Cart Total (${cartCount} ${cartCount === 1 ? 'item' : 'items'}):</span>
+                <span class="popup-summary-value">AED ${cartTotal.toFixed(2)}</span>
+            </div>
+            <div class="popup-buttons">
+                <button class="popup-btn-view-cart" onclick="closeCartPopup(); toggleCart();">
+                    🛒 View Cart | <span class="arabic-text">عرض السلة</span>
+                </button>
+                <button class="popup-btn-continue" onclick="closeCartPopup()">
+                    Continue Shopping | <span class="arabic-text">متابعة التسوق</span>
+                </button>
+            </div>
+        </div>
+    `;
+    
+    popup.classList.add('active');
+}
+
+function closeCartPopup() {
+    const popup = document.getElementById('cartPopup');
+    popup.classList.remove('active');
 }
 
 function updateCart() {
