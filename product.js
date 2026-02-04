@@ -362,7 +362,21 @@ async function initProductPage() {
     `;
   }
 
-  if (detailsContainer) detailsContainer.innerHTML = detailsHTML;
+ if (detailsContainer) detailsContainer.innerHTML = detailsHTML;
+
+  // Check if product already in cart - show transformed button
+  const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existingItem = existingCart.find(i => i.id === product.id);
+  
+  if (existingItem && !isOutOfStock) {
+    const desktopBtn = document.getElementById("addToCartBtn");
+    if (desktopBtn) transformToQtyButton(desktopBtn, product);
+    
+    const mobileBtn = document.getElementById("mobileAddToCartBtn");
+    if (mobileBtn) transformToQtyButton(mobileBtn, product);
+  }
+
+  // ADD TO CART HANDLER
 
   // ADD TO CART HANDLER - self-contained, uses localStorage directly
   const addToCartHandler = () => {
