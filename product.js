@@ -376,10 +376,7 @@ function resetToAddButton(productId) {
       
       transformToQtyButton(this, product);
       return true;
-    };
-  }
-}
-  // ADD TO CART HANDLER - self-contained, uses localStorage directly
+   / ADD TO CART HANDLER - self-contained, uses localStorage directly
   const addToCartHandler = () => {
     if (product.quantity === 0) return false;
 
