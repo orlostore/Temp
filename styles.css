@@ -2541,7 +2541,8 @@ footer p {
 
 .product-btn-transformed .qty-btn {
   width: 50px;
-  height: 44px;
+  height: auto;
+  padding: 1rem 0;
   border: none;
   background: rgba(255,255,255,0.2);
   color: white;
