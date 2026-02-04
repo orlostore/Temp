@@ -244,7 +244,7 @@ async function initProductPage() {
   }
 
   if (detailsContainer) detailsContainer.innerHTML = detailsHTML;
-// Transform button to quantity control (Premium Glass style)
+
 function transformToQtyButton(btn, product) {
   const localCart = JSON.parse(localStorage.getItem("cart")) || [];
   const item = localCart.find(i => i.id === product.id);
